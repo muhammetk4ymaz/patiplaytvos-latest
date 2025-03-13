@@ -89,6 +89,9 @@ const MovieCommentsSection = () => {
                 }}
                 renderItem={({item, index}) => (
                   <SpatialNavigationFocusableView
+                    viewProps={{
+                      isTVSelectable: true,
+                    }}
                     onSelect={() => {
                       console.log('Comment index', index);
                     }}

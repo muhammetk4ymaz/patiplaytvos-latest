@@ -1,18 +1,9 @@
-import React, {useEffect, useRef} from 'react';
-import {
-  BackHandler,
-  Image,
-  StyleSheet,
-  TVEventControl,
-  TVEventHandler,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import React, {useRef} from 'react';
+import {Image, StyleSheet, useWindowDimensions, View} from 'react-native';
 import Video from 'react-native-video';
 import {
   DefaultFocus,
   SpatialNavigationFocusableView,
-  SpatialNavigationNode,
   SpatialNavigationScrollView,
   SpatialNavigationView,
   SpatialNavigationVirtualizedListRef,
@@ -152,6 +143,7 @@ const MainTitle = () => {
         </DefaultFocus>
 
         <SpatialNavigationFocusableView
+          viewProps={{isTVSelectable: true}}
           additionalOffset={10000}
           onSelect={() => {
             console.log('MaterialCommunityIcons');

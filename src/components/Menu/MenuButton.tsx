@@ -43,7 +43,9 @@ ButtonContent.displayName = 'ButtonContent';
 
 export const MenuButton = ({icon, isMenuOpen, onSelect}: ButtonProps) => {
   return (
-    <SpatialNavigationFocusableView onSelect={onSelect}>
+    <SpatialNavigationFocusableView
+      onSelect={onSelect}
+      viewProps={{isTVSelectable: true}}>
       {({isFocused}) => (
         <ButtonContent
           icon={icon}

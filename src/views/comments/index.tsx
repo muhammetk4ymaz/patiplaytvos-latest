@@ -4,23 +4,26 @@ import {
   DefaultFocus,
   SpatialNavigationFocusableView,
   SpatialNavigationNode,
+  SpatialNavigationRoot,
   SpatialNavigationView,
 } from 'react-tv-space-navigation';
 import {Page} from '../../components/Page';
 import MovieCommentsSection from '../movie/components/MovieCommentsSection';
 import {useFocusAnimation} from '../../helpers/useFocusAnimation';
 import {scaledPixels} from '../../helpers/scaledPixels';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const CommentsView = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   return (
-    <Page>
+    <SpatialNavigationRoot isActive={isFocused}>
       <SpatialNavigationView
         direction="horizontal"
         style={{width: '100%', height: '100%'}}>
         <SpatialNavigationNode>
           <SpatialNavigationFocusableView
+            viewProps={{isTVSelectable: true}}
             onSelect={() => {
               navigation.goBack();
             }}
@@ -47,9 +50,10 @@ const CommentsView = () => {
               );
             }}></SpatialNavigationFocusableView>
         </SpatialNavigationNode>
+
         <MovieCommentsSection />
       </SpatialNavigationView>
-    </Page>
+    </SpatialNavigationRoot>
   );
 };
 

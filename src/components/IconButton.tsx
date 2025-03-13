@@ -37,6 +37,9 @@ const ButtonContent = forwardRef<
 const IconButton = (props: Props) => {
   return (
     <SpatialNavigationFocusableView
+      viewProps={{
+        isTVSelectable: true,
+      }}
       onSelect={props.onSelect}
       additionalOffset={props.additionalOffset}>
       {({isFocused, isRootActive}) => (

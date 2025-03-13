@@ -1,6 +1,6 @@
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import React, {useRef} from 'react';
-import {Animated, Dimensions, StyleSheet} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Animated, BackHandler, Dimensions, StyleSheet} from 'react-native';
 import Video, {VideoRef} from 'react-native-video';
 import {
   SpatialNavigationRoot,
@@ -10,19 +10,23 @@ import {scaledPixels} from '../../helpers/scaledPixels';
 import {MovieProvider, useMovieContext} from './MovieContext';
 import MovieControls from './components/MovieControls';
 import PlayerIcon from './components/PlayerIcon';
+import {GoBackConfiguration} from '../../components/GoBackConfiguration';
 
 const {height, width} = Dimensions.get('window');
 
 type Props = {};
 
 const MovieViewWithProvider = () => {
-  // usePreventRemove(true, ({data}) => {
-  //   if (Platform.OS === 'web') {
-  //     // Alert is not supported on web, so we can use confirm
-  //   } else {
-  //     // Prompt the user before leaving the screen
-  //   }
-  // });
+  // useEffect(() => {
+  //   const event = BackHandler.addEventListener('hardwareBackPress', () => {
+  //     return true;
+  //   });
+
+  //   return () => {
+  //     event.remove();
+  //   };
+  // }, []);
+
   return (
     <MovieProvider>
       <MovieView />

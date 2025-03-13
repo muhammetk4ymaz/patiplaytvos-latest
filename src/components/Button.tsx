@@ -56,13 +56,14 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <SpatialNavigationFocusableView
+      viewProps={{
+        isTVSelectable: true,
+      }}
       onFocus={onFocus}
       onSelect={onSelect}
       additionalOffset={additionalOffset}>
       {({isFocused, isRootActive}) => (
-        <Pressable>
-          <ButtonContent label={label} isFocused={isFocused && isRootActive} />
-        </Pressable>
+        <ButtonContent label={label} isFocused={isFocused && isRootActive} />
       )}
     </SpatialNavigationFocusableView>
   );

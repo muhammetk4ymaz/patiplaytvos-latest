@@ -122,9 +122,10 @@ export const Menu = ({state, navigation}: BottomTabBarProps) => {
                       icon={menuItems[index].icon}
                       isMenuOpen={isMenuOpen}
                       isActive={state.index === index}
-                      onSelect={() =>
-                        navigation.navigate(route.name, route.params)
-                      }
+                      onSelect={() => {
+                        navigation.navigate(route.name, route.params);
+                        console.log('navigated');
+                      }}
                     />
                   </Fragment>
                 );

@@ -1,9 +1,9 @@
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {
   Animated,
   Dimensions,
   HWEvent,
-  Pressable,
   StyleSheet,
   Text,
   TVEventHandler,
@@ -14,21 +14,18 @@ import {useSharedValue, withTiming} from 'react-native-reanimated';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {VideoRef} from 'react-native-video';
 import {
-  DefaultFocus,
   SpatialNavigationFocusableView,
   SpatialNavigationNode,
   SpatialNavigationView,
 } from 'react-tv-space-navigation';
-import {useMovieContext} from '../MovieContext';
-import {SupportedKeys} from '../../../components/remote-control/SupportedKeys';
-import RemoteControlManager from '../../../components/remote-control/RemoteControlManager';
-import {useKey} from '../../../hooks/useKey';
-import CustomText from '../../../components/CustomText';
-import {scaledPixels} from '../../../helpers/scaledPixels';
-import {Button} from '../../../components/Button';
-import {theme} from '../../../theme/theme';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../../../App';
+import {Button} from '../../../components/Button';
+import CustomText from '../../../components/CustomText';
+import RemoteControlManager from '../../../components/remote-control/RemoteControlManager';
+import {SupportedKeys} from '../../../components/remote-control/SupportedKeys';
+import {scaledPixels} from '../../../helpers/scaledPixels';
+import {theme} from '../../../theme/theme';
+import {useMovieContext} from '../MovieContext';
 
 type Props = {
   videoRef: React.RefObject<VideoRef>;
@@ -56,11 +53,8 @@ const MovieControls = (props: Props) => {
   ]);
 
   const forwardProgress = (duration: number) => {
-    if (!movieContext.isPaused) {
-      movieContext.setIsPaused(true);
-      movieContext.setIsOnlyProgressVisible(true);
-    }
-
+    movieContext.setIsPaused(true);
+    movieContext.setIsOnlyProgressVisible(true);
     if (sliderProgress.value + duration > max.value) {
       sliderProgress.value = withTiming(max.value, {duration: 100});
       movieContext.setCurrentProgress(max.value);
@@ -77,10 +71,8 @@ const MovieControls = (props: Props) => {
   };
 
   const backwardProgress = (duration: number) => {
-    if (!movieContext.isPaused) {
-      movieContext.setIsPaused(true);
-      movieContext.setIsOnlyProgressVisible(true);
-    }
+    movieContext.setIsPaused(true);
+    movieContext.setIsOnlyProgressVisible(true);
     if (sliderProgress.value - duration < 0) {
       movieContext.setCurrentProgress(0);
       sliderProgress.value = withTiming(0, {duration: 100});
@@ -98,12 +90,19 @@ const MovieControls = (props: Props) => {
 
   useEffect(() => {
     const remoteControlListener = (pressedKey: SupportedKeys) => {
+      console.log('pressedKey', pressedKey);
+
       if (movieContext.controlsVisible && movieContext.progressFocused) {
-        if (
-          pressedKey !== SupportedKeys.Left &&
-          pressedKey !== SupportedKeys.Right
-        ) {
-          movieContext.setIsOnlyProgressVisible(false);
+        switch (pressedKey) {
+          case SupportedKeys.Left:
+            backwardProgress(10);
+            break;
+          case SupportedKeys.Right:
+            forwardProgress(10);
+            break;
+          default:
+            movieContext.setIsOnlyProgressVisible(false);
+            break;
         }
       }
 
@@ -120,82 +119,67 @@ const MovieControls = (props: Props) => {
     };
   }, [movieContext.progressFocused, movieContext.controlsVisible]);
 
-  useKey(SupportedKeys.Left, () => {
-    if (movieContext.progressFocused) {
-      backwardProgress(10);
-    }
-    return true;
-  });
-
-  useKey(SupportedKeys.Right, () => {
-    if (movieContext.progressFocused) {
-      forwardProgress(10);
-    }
-    return true;
-  });
-
   const handleLongPressRight = () => {
-    movieContext.setIsPaused(true);
-    movieContext.setIsOnlyProgressVisible(true);
-    let counter = 0;
-    forwardIntervalId.current = setInterval(() => {
-      counter++;
-      const newDurataion = counter * 1.5;
-      forwardProgress(newDurataion);
-    }, 100);
+    console.log('Burada', movieContext.controlsVisible);
+
+    if (movieContext.controlsVisible) {
+      movieContext.setIsPaused(true);
+      movieContext.setIsOnlyProgressVisible(true);
+      let counter = 0;
+      forwardIntervalId.current = setInterval(() => {
+        counter++;
+        const newDurataion = counter * 10;
+        console.log('newDurataion', newDurataion);
+        forwardProgress(newDurataion);
+      }, 100);
+    }
   };
 
   const stopLongPressRight = () => {
+    console.log('stopLongPressRight');
     clearInterval(forwardIntervalId.current as NodeJS.Timeout);
   };
 
   const handleLongPressLeft = () => {
-    movieContext.setIsPaused(true);
-    movieContext.setIsOnlyProgressVisible(true);
-    let counter = 0;
-    backwardIntervalId.current = setInterval(() => {
-      counter++;
-      const newDurataion = counter * 1.5;
-      backwardProgress(newDurataion);
-    }, 100);
+    if (movieContext.controlsVisible) {
+      movieContext.setIsPaused(true);
+      movieContext.setIsOnlyProgressVisible(true);
+      let counter = 0;
+      backwardIntervalId.current = setInterval(() => {
+        counter++;
+        const newDurataion = counter * 10;
+        backwardProgress(newDurataion);
+      }, 100);
+    }
   };
 
   const stopLongPressLeft = () => {
+    console.log('stopLongPressLeft');
     clearInterval(backwardIntervalId.current as NodeJS.Timeout);
   };
 
   React.useEffect(() => {
-    const handleKeyPress = (keyPress: HWEvent) => {
-      // Uzun basmayı algılamak için keyPress.eventKeyAction kullanılır.
-      // 0: Basıldı, 1: Bırakıldı
-      if (movieContext.controlsVisible) {
-        if (keyPress.eventKeyAction === 0) {
-          switch (keyPress.eventType) {
-            case 'longRight':
-              handleLongPressRight();
-              break;
-            case 'longLeft':
-              handleLongPressLeft();
-              break;
-            default:
-              break;
-          }
-        } else if (keyPress.eventKeyAction === 1) {
-          switch (keyPress.eventType) {
-            case 'longRight':
-              stopLongPressRight();
-              break;
-            case 'longLeft':
-              stopLongPressLeft();
-              break;
-            default:
-              break;
-          }
-        }
-      }
-    };
+    TVEventHandler.addListener((keyPress: HWEvent) => {
+      //   console.log(keyPress);
+      console.log('keyPress', keyPress);
 
-    TVEventHandler.addListener(handleKeyPress);
+      if (keyPress.eventType === 'longRight' && keyPress.eventKeyAction === 0) {
+        handleLongPressRight();
+      } else if (
+        keyPress.eventType === 'longRight' &&
+        keyPress.eventKeyAction === 1
+      ) {
+        stopLongPressRight();
+      }
+      if (keyPress.eventType === 'longLeft' && keyPress.eventKeyAction === 0) {
+        handleLongPressLeft();
+      } else if (
+        keyPress.eventType === 'longLeft' &&
+        keyPress.eventKeyAction === 1
+      ) {
+        stopLongPressLeft();
+      }
+    });
   }, [movieContext.controlsVisible]);
 
   return (
@@ -281,90 +265,89 @@ const MovieControls = (props: Props) => {
             </View>
 
             <SpatialNavigationNode>
-              <DefaultFocus>
-                <SpatialNavigationFocusableView
-                  style={{flex: 1}}
-                  onFocus={() => movieContext.setProgressFocused(true)}
-                  onBlur={() => movieContext.setProgressFocused(false)}
-                  onSelect={() => {
-                    if (movieContext.isPaused) {
-                      props.videoRef.current?.seek(sliderProgress.value);
-                      movieContext.setIsOnlyProgressVisible(false);
-                      movieContext.setIsPaused(false);
-                    } else {
-                      movieContext.setIsPaused(true);
-                    }
-                  }}
-                  children={({isFocused}) => {
-                    return (
-                      <Slider
-                        progress={sliderProgress}
-                        minimumValue={min}
-                        maximumValue={max}
-                        cache={cache}
-                        sliderHeight={isFocused ? 8 : 6}
-                        containerStyle={{
-                          borderRadius: 99,
-                        }}
-                        disableTrackFollow
-                        renderThumb={() => (
-                          <Pressable>
-                            <View
-                              style={{
-                                display:
-                                  movieContext.isOnlyProgressVisible &&
-                                  (currentProgress /
-                                    movieContext.progress.seekableDuration) *
-                                    (Dimensions.get('window').width - 48) >
-                                    85 &&
-                                  ((movieContext.progress.seekableDuration -
-                                    currentProgress) /
-                                    movieContext.progress.seekableDuration) *
-                                    (Dimensions.get('window').width - 48) >
-                                    85
-                                    ? 'flex'
-                                    : 'none',
-                                position: 'absolute',
-                                width: 200,
-                                gap: 12,
-                                top: -160,
-                                left: -85,
-                              }}>
-                              <View
-                                style={{
-                                  height: 100,
-                                  width: 200,
-                                  backgroundColor: 'red',
-                                  borderRadius: 12,
-                                }}></View>
-                              <Text
-                                style={{
-                                  color: 'white',
-                                  textAlign: 'center',
-                                }}>
-                                {formatTime(currentProgress)}
-                              </Text>
-                            </View>
+              <Slider
+                progress={sliderProgress}
+                minimumValue={min}
+                maximumValue={max}
+                cache={cache}
+                sliderHeight={6}
+                containerStyle={{
+                  borderRadius: 99,
+                }}
+                disableTrackFollow
+                renderThumb={() => (
+                  <View>
+                    <View
+                      style={{
+                        display:
+                          movieContext.isOnlyProgressVisible &&
+                          (currentProgress /
+                            movieContext.progress.seekableDuration) *
+                            (Dimensions.get('window').width - 48) >
+                            85 &&
+                          ((movieContext.progress.seekableDuration -
+                            currentProgress) /
+                            movieContext.progress.seekableDuration) *
+                            (Dimensions.get('window').width - 48) >
+                            85
+                            ? 'flex'
+                            : 'none',
+                        position: 'absolute',
+                        width: 200,
+                        gap: 12,
+                        top: -160,
+                        left: -85,
+                      }}>
+                      <View
+                        style={{
+                          height: 100,
+                          width: 200,
+                          backgroundColor: 'red',
+                          borderRadius: 12,
+                        }}></View>
+                      <Text
+                        style={{
+                          color: 'white',
+                          textAlign: 'center',
+                        }}>
+                        {formatTime(currentProgress)}
+                      </Text>
+                    </View>
 
-                            <MaterialCommunityIcons
-                              name="circle"
-                              size={24}
-                              color={isFocused ? 'white' : 'transparent'}
-                            />
-                          </Pressable>
-                        )}
-                        theme={{
-                          disableMinTrackTintColor: '#000',
-                          maximumTrackTintColor: '#fff',
-                          minimumTrackTintColor: theme.colors.patiplay.primary,
-                          cacheTrackTintColor: '#333',
-                          bubbleBackgroundColor: '#666',
-                          heartbeatColor: '#999',
-                        }}
-                      />
-                    );
-                  }}></SpatialNavigationFocusableView>
-              </DefaultFocus>
+                    <SpatialNavigationFocusableView
+                      viewProps={{
+                        isTVSelectable: true,
+                      }}
+                      style={{flex: 1}}
+                      onFocus={() => movieContext.setProgressFocused(true)}
+                      onBlur={() => movieContext.setProgressFocused(false)}
+                      onSelect={() => {
+                        if (movieContext.isPaused) {
+                          props.videoRef.current?.seek(sliderProgress.value);
+                          movieContext.setIsOnlyProgressVisible(false);
+                          movieContext.setIsPaused(false);
+                        } else {
+                          movieContext.setIsPaused(true);
+                        }
+                      }}
+                      children={({isFocused}) => (
+                        <MaterialCommunityIcons
+                          name="circle"
+                          size={24}
+                          color={isFocused ? 'white' : 'transparent'}
+                        />
+                      )}></SpatialNavigationFocusableView>
+                  </View>
+                )}
+                theme={{
+                  disableMinTrackTintColor: '#000',
+                  maximumTrackTintColor: '#fff',
+                  minimumTrackTintColor: theme.colors.patiplay.primary,
+                  cacheTrackTintColor: '#333',
+                  bubbleBackgroundColor: '#666',
+                  heartbeatColor: '#999',
+                }}
+              />
             </SpatialNavigationNode>
           </SpatialNavigationView>
           <MovieTimeInfo />

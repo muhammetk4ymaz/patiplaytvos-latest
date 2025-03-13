@@ -7,16 +7,6 @@ import {BackHandler} from 'react-native';
 export const GoBackConfiguration = () => {
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const event = BackHandler.addEventListener('hardwareBackPress', () => {
-      return true;
-    });
-
-    return () => {
-      event.remove();
-    };
-  }, []);
-
   const goBackOnBackPress = useCallback(
     (pressedKey: SupportedKeys) => {
       if (!navigation.isFocused) {

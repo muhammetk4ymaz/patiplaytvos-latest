@@ -4,14 +4,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import React, {useCallback, useRef} from 'react';
-import {
-  Animated,
-  Image,
-  Platform,
-  Pressable,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Animated, Image, Platform, Pressable, View} from 'react-native';
 import {
   DefaultFocus,
   SpatialNavigationFocusableView,
@@ -92,7 +85,7 @@ const CustomList = React.forwardRef<View, Props>(
     );
 
     return (
-      <Pressable
+      <View
         ref={ref}
         style={{
           height:
@@ -128,6 +121,9 @@ const CustomList = React.forwardRef<View, Props>(
             renderItem={({index}) => {
               return (
                 <SpatialNavigationFocusableView
+                  viewProps={{
+                    isTVSelectable: true,
+                  }}
                   onSelect={() => {
                     navigation.navigate('Movie');
                   }}
@@ -163,7 +159,7 @@ const CustomList = React.forwardRef<View, Props>(
             }}
           />
         </DefaultFocus>
-      </Pressable>
+      </View>
     );
   },
 );

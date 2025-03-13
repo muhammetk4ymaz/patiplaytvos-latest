@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {BackHandler, TVEventControl, TVEventHandler} from 'react-native';
+import {BackHandler} from 'react-native';
 
 const useDisableBackButton = () => {
   useEffect(() => {
@@ -13,9 +13,7 @@ const useDisableBackButton = () => {
       backAction,
     );
 
-    return () => {
-      backHandler.remove();
-    };
+    return () => backHandler.remove();
   }, []);
 };
 
