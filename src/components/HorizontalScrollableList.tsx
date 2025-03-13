@@ -4,7 +4,14 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import React, {useCallback, useRef} from 'react';
-import {Animated, Image, Platform, Pressable, View} from 'react-native';
+import {
+  Animated,
+  Image,
+  Platform,
+  Pressable,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   DefaultFocus,
   SpatialNavigationFocusableView,

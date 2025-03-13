@@ -1,12 +1,13 @@
-import React, {useEffect, useRef} from 'react';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import React, {useRef} from 'react';
 import {Animated, Dimensions, StyleSheet} from 'react-native';
 import Video, {VideoRef} from 'react-native-video';
 import {
   SpatialNavigationRoot,
   SpatialNavigationView,
 } from 'react-tv-space-navigation';
+import {scaledPixels} from '../../helpers/scaledPixels';
 import {MovieProvider, useMovieContext} from './MovieContext';
-import MovieCommentsSection from './components/MovieCommentsSection';
 import MovieControls from './components/MovieControls';
 import PlayerIcon from './components/PlayerIcon';
 
@@ -32,23 +33,35 @@ const MovieViewWithProvider = () => {
 const MovieView = (props: Props) => {
   const movieContext = useMovieContext();
   const videoRef = React.useRef<VideoRef>(null);
-
   const widthAnim = useRef(new Animated.Value(100)).current;
 
-  useEffect(() => {
+  const focused = useIsFocused();
+
+  useFocusEffect(() => {
     Animated.timing(widthAnim, {
-      toValue: movieContext.isCommentVisible ? 70 : 100,
-      duration: 500, // 1 saniye
+      toValue: 100,
+      duration: 1, // 1 saniye
       useNativeDriver: false,
     }).start();
-  }, [movieContext.isCommentVisible]);
+
+    movieContext.setIsCommentVisible(false);
+
+    return () => {
+      Animated.timing(widthAnim, {
+        toValue: 70,
+        duration: 1, // 1 saniye
+        useNativeDriver: false,
+      }).start();
+      movieContext.setIsCommentVisible(true);
+    };
+  });
 
   return (
-    <SpatialNavigationRoot>
+    <SpatialNavigationRoot isActive={focused}>
       <SpatialNavigationView direction={'vertical'} style={{flex: 1}}>
         <Animated.View
           style={{
-            position: movieContext.isCommentVisible ? 'relative' : 'absolute',
+            position: 'absolute',
             width: widthAnim.interpolate({
               inputRange: [70, 100],
               outputRange: ['70%', '100%'],
@@ -61,7 +74,12 @@ const MovieView = (props: Props) => {
             // source={{
             //   uri: 'https://cdn.media.ccc.de/congress/2019/h264-sd/36c3-10496-deu-eng-spa-Das_Mauern_muss_weg_sd.mp4',
             // }}
-            style={StyleSheet.absoluteFill}
+            style={[
+              StyleSheet.absoluteFill,
+              {
+                margin: movieContext.isCommentVisible ? scaledPixels(100) : 0,
+              },
+            ]}
             onProgress={movieContext.setProgress}
             paused={movieContext.isPaused}
             volume={0}
@@ -76,13 +94,12 @@ const MovieView = (props: Props) => {
             }}
           />
           <PlayerIcon />
+          {!movieContext.isCommentVisible && (
+            <MovieControls videoRef={videoRef} />
+          )}
         </Animated.View>
 
-        {movieContext.isCommentVisible && <MovieCommentsSection />}
-
-        {!movieContext.isCommentVisible && (
-          <MovieControls videoRef={videoRef} />
-        )}
+        {/* {movieContext.isCommentVisible && <MovieCommentsSection />} */}
       </SpatialNavigationView>
     </SpatialNavigationRoot>
   );

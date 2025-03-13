@@ -27,6 +27,8 @@ import CustomText from '../../../components/CustomText';
 import {scaledPixels} from '../../../helpers/scaledPixels';
 import {Button} from '../../../components/Button';
 import {theme} from '../../../theme/theme';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../../../App';
 
 type Props = {
   videoRef: React.RefObject<VideoRef>;
@@ -197,183 +199,179 @@ const MovieControls = (props: Props) => {
   }, [movieContext.controlsVisible]);
 
   return (
-    <SpatialNavigationNode>
-      <SpatialNavigationView
-        direction="vertical"
+    <SpatialNavigationView
+      direction="vertical"
+      style={{
+        flex: 1,
+        justifyContent: 'flex-end',
+        backgroundColor: movieContext.controlsVisible
+          ? 'rgba(0,0,0,0.5)'
+          : 'transparent',
+      }}>
+      <Animated.View
         style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          backgroundColor: movieContext.controlsVisible
-            ? 'rgba(0,0,0,0.5)'
-            : 'transparent',
+          display: movieContext.controlsVisible ? 'flex' : 'none',
+          paddingHorizontal: theme.sizes.view.horizontalPadding,
+          paddingBottom: scaledPixels(48),
         }}>
-        <Animated.View
+        <SpatialNavigationView
+          direction="vertical"
           style={{
-            display: movieContext.controlsVisible ? 'flex' : 'none',
-            paddingHorizontal: theme.sizes.view.horizontalPadding,
-            paddingBottom: scaledPixels(48),
+            gap: scaledPixels(24),
+            alignItems: 'center',
           }}>
+          {/* {!isOnlyProgressVisible && <Button label="Enjoy Now" />} */}
           <SpatialNavigationView
-            direction="vertical"
+            direction="horizontal"
             style={{
               gap: scaledPixels(24),
-              alignItems: 'center',
             }}>
-            {/* {!isOnlyProgressVisible && <Button label="Enjoy Now" />} */}
-            <SpatialNavigationView
-              direction="horizontal"
+            <View
               style={{
-                gap: scaledPixels(24),
+                display:
+                  movieContext.isOnlyProgressVisible &&
+                  (currentProgress / movieContext.progress.seekableDuration) *
+                    (Dimensions.get('window').width - 48) <
+                    85
+                    ? 'flex'
+                    : 'none',
+                position: 'absolute',
+                width: 200,
+                gap: 12,
+                top: -172,
+                left: 0,
               }}>
               <View
                 style={{
-                  display:
-                    movieContext.isOnlyProgressVisible &&
-                    (currentProgress / movieContext.progress.seekableDuration) *
-                      (Dimensions.get('window').width - 48) <
-                      85
-                      ? 'flex'
-                      : 'none',
-                  position: 'absolute',
+                  height: 100,
                   width: 200,
-                  gap: 12,
-                  top: -172,
-                  left: 0,
-                }}>
-                <View
-                  style={{
-                    height: 100,
-                    width: 200,
-                    backgroundColor: 'red',
-                    borderRadius: 12,
-                  }}></View>
-                <Text style={{color: 'white', textAlign: 'center'}}>
-                  {formatTime(currentProgress)}
-                </Text>
-              </View>
+                  backgroundColor: 'red',
+                  borderRadius: 12,
+                }}></View>
+              <Text style={{color: 'white', textAlign: 'center'}}>
+                {formatTime(currentProgress)}
+              </Text>
+            </View>
+            <View
+              style={{
+                display:
+                  movieContext.isOnlyProgressVisible &&
+                  ((movieContext.progress.seekableDuration - currentProgress) /
+                    movieContext.progress.seekableDuration) *
+                    (Dimensions.get('window').width - 48) <
+                    85
+                    ? 'flex'
+                    : 'none',
+                position: 'absolute',
+                width: 200,
+                gap: 12,
+                top: -172,
+                right: 0,
+              }}>
               <View
                 style={{
-                  display:
-                    movieContext.isOnlyProgressVisible &&
-                    ((movieContext.progress.seekableDuration -
-                      currentProgress) /
-                      movieContext.progress.seekableDuration) *
-                      (Dimensions.get('window').width - 48) <
-                      85
-                      ? 'flex'
-                      : 'none',
-                  position: 'absolute',
+                  height: 100,
                   width: 200,
-                  gap: 12,
-                  top: -172,
-                  right: 0,
-                }}>
-                <View
-                  style={{
-                    height: 100,
-                    width: 200,
-                    backgroundColor: 'red',
-                    borderRadius: 12,
-                  }}></View>
-                <Text style={{color: 'white', textAlign: 'center'}}>
-                  {formatTime(currentProgress)}
-                </Text>
-              </View>
+                  backgroundColor: 'red',
+                  borderRadius: 12,
+                }}></View>
+              <Text style={{color: 'white', textAlign: 'center'}}>
+                {formatTime(currentProgress)}
+              </Text>
+            </View>
 
-              <SpatialNavigationNode>
-                <DefaultFocus>
-                  <SpatialNavigationFocusableView
-                    style={{flex: 1}}
-                    onFocus={() => movieContext.setProgressFocused(true)}
-                    onBlur={() => movieContext.setProgressFocused(false)}
-                    onSelect={() => {
-                      if (movieContext.isPaused) {
-                        props.videoRef.current?.seek(sliderProgress.value);
-                        movieContext.setIsOnlyProgressVisible(false);
-                        movieContext.setIsPaused(false);
-                      } else {
-                        movieContext.setIsPaused(true);
-                      }
-                    }}
-                    children={({isFocused}) => {
-                      return (
-                        <Slider
-                          progress={sliderProgress}
-                          minimumValue={min}
-                          maximumValue={max}
-                          cache={cache}
-                          sliderHeight={isFocused ? 8 : 6}
-                          containerStyle={{
-                            borderRadius: 99,
-                          }}
-                          disableTrackFollow
-                          renderThumb={() => (
-                            <Pressable>
+            <SpatialNavigationNode>
+              <DefaultFocus>
+                <SpatialNavigationFocusableView
+                  style={{flex: 1}}
+                  onFocus={() => movieContext.setProgressFocused(true)}
+                  onBlur={() => movieContext.setProgressFocused(false)}
+                  onSelect={() => {
+                    if (movieContext.isPaused) {
+                      props.videoRef.current?.seek(sliderProgress.value);
+                      movieContext.setIsOnlyProgressVisible(false);
+                      movieContext.setIsPaused(false);
+                    } else {
+                      movieContext.setIsPaused(true);
+                    }
+                  }}
+                  children={({isFocused}) => {
+                    return (
+                      <Slider
+                        progress={sliderProgress}
+                        minimumValue={min}
+                        maximumValue={max}
+                        cache={cache}
+                        sliderHeight={isFocused ? 8 : 6}
+                        containerStyle={{
+                          borderRadius: 99,
+                        }}
+                        disableTrackFollow
+                        renderThumb={() => (
+                          <Pressable>
+                            <View
+                              style={{
+                                display:
+                                  movieContext.isOnlyProgressVisible &&
+                                  (currentProgress /
+                                    movieContext.progress.seekableDuration) *
+                                    (Dimensions.get('window').width - 48) >
+                                    85 &&
+                                  ((movieContext.progress.seekableDuration -
+                                    currentProgress) /
+                                    movieContext.progress.seekableDuration) *
+                                    (Dimensions.get('window').width - 48) >
+                                    85
+                                    ? 'flex'
+                                    : 'none',
+                                position: 'absolute',
+                                width: 200,
+                                gap: 12,
+                                top: -160,
+                                left: -85,
+                              }}>
                               <View
                                 style={{
-                                  display:
-                                    movieContext.isOnlyProgressVisible &&
-                                    (currentProgress /
-                                      movieContext.progress.seekableDuration) *
-                                      (Dimensions.get('window').width - 48) >
-                                      85 &&
-                                    ((movieContext.progress.seekableDuration -
-                                      currentProgress) /
-                                      movieContext.progress.seekableDuration) *
-                                      (Dimensions.get('window').width - 48) >
-                                      85
-                                      ? 'flex'
-                                      : 'none',
-                                  position: 'absolute',
+                                  height: 100,
                                   width: 200,
-                                  gap: 12,
-                                  top: -160,
-                                  left: -85,
+                                  backgroundColor: 'red',
+                                  borderRadius: 12,
+                                }}></View>
+                              <Text
+                                style={{
+                                  color: 'white',
+                                  textAlign: 'center',
                                 }}>
-                                <View
-                                  style={{
-                                    height: 100,
-                                    width: 200,
-                                    backgroundColor: 'red',
-                                    borderRadius: 12,
-                                  }}></View>
-                                <Text
-                                  style={{
-                                    color: 'white',
-                                    textAlign: 'center',
-                                  }}>
-                                  {formatTime(currentProgress)}
-                                </Text>
-                              </View>
+                                {formatTime(currentProgress)}
+                              </Text>
+                            </View>
 
-                              <MaterialCommunityIcons
-                                name="circle"
-                                size={24}
-                                color={isFocused ? 'white' : 'transparent'}
-                              />
-                            </Pressable>
-                          )}
-                          theme={{
-                            disableMinTrackTintColor: '#000',
-                            maximumTrackTintColor: '#fff',
-                            minimumTrackTintColor:
-                              theme.colors.patiplay.primary,
-                            cacheTrackTintColor: '#333',
-                            bubbleBackgroundColor: '#666',
-                            heartbeatColor: '#999',
-                          }}
-                        />
-                      );
-                    }}></SpatialNavigationFocusableView>
-                </DefaultFocus>
-              </SpatialNavigationNode>
-            </SpatialNavigationView>
-            <MovieTimeInfo />
-            <MovieButtons />
+                            <MaterialCommunityIcons
+                              name="circle"
+                              size={24}
+                              color={isFocused ? 'white' : 'transparent'}
+                            />
+                          </Pressable>
+                        )}
+                        theme={{
+                          disableMinTrackTintColor: '#000',
+                          maximumTrackTintColor: '#fff',
+                          minimumTrackTintColor: theme.colors.patiplay.primary,
+                          cacheTrackTintColor: '#333',
+                          bubbleBackgroundColor: '#666',
+                          heartbeatColor: '#999',
+                        }}
+                      />
+                    );
+                  }}></SpatialNavigationFocusableView>
+              </DefaultFocus>
+            </SpatialNavigationNode>
           </SpatialNavigationView>
-        </Animated.View>
-      </SpatialNavigationView>
-    </SpatialNavigationNode>
+          <MovieTimeInfo />
+          <MovieButtons />
+        </SpatialNavigationView>
+      </Animated.View>
+    </SpatialNavigationView>
   );
 };
 
@@ -425,6 +423,7 @@ const MovieTimeInfo = () => {
 
 const MovieButtons = () => {
   const movieContext = useMovieContext();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     !movieContext.isOnlyProgressVisible && (
       <SpatialNavigationNode>
@@ -432,10 +431,17 @@ const MovieButtons = () => {
           <Button
             label="Comment"
             onSelect={() => {
+              console.log('Comment');
+              navigation.navigate('Comments');
               movieContext.setIsCommentVisible(true);
             }}
           />
-          <Button label="Episodes" onSelect={() => {}} />
+          <Button
+            label="Episodes"
+            onSelect={() => {
+              console.log('Episodes');
+            }}
+          />
           <Button label="Subtitles" onSelect={() => {}} />
           <Button label="Enjoy Now" onSelect={() => {}} />
         </SpatialNavigationView>

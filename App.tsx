@@ -12,9 +12,9 @@ import {Menu} from './src/components/Menu/Menu';
 import {MenuProvider} from './src/components/Menu/MenuContext';
 import './src/components/configureRemoteControl';
 import {theme} from './src/theme/theme';
+import CommentsView from './src/views/comments';
 import HomeView from './src/views/home';
 import MovieView from './src/views/movie';
-import useDisableBackButton from './src/hooks/useDisableBackButton';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,7 +23,7 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 export type RootStackParamList = {
   TabNavigator: undefined;
   Movie: undefined;
-  Comment: undefined;
+  Comments: undefined;
 };
 
 export type RootTabParamList = {
@@ -54,8 +54,6 @@ const TabNavigator = () => {
 const App = () => {
   const {height, width} = useWindowDimensions();
 
-  // useDisableBackButton();
-
   return (
     <GestureHandlerRootView>
       <NavigationContainer>
@@ -67,6 +65,14 @@ const App = () => {
             }}>
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
             <Stack.Screen name="Movie" component={MovieView} />
+            <Stack.Screen
+              name="Comments"
+              component={CommentsView}
+              options={{
+                contentStyle: {},
+                presentation: 'containedTransparentModal',
+              }}
+            />
           </Stack.Navigator>
         </View>
       </NavigationContainer>

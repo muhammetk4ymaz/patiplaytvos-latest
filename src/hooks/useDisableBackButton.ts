@@ -13,8 +13,6 @@ const useDisableBackButton = () => {
       backAction,
     );
 
-    TVEventControl.disableTVMenuKey();
-
     return () => {
       backHandler.remove();
     };
