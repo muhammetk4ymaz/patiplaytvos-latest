@@ -16,6 +16,7 @@ import {useMenuContext} from '../../components/Menu/MenuContext';
 import {Page} from '../../components/Page';
 import {scaledPixels} from '../../helpers/scaledPixels';
 import {theme} from '../../theme/theme';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const HomeView = () => {
   const {isOpen: isMenuOpen} = useMenuContext();
@@ -124,7 +125,7 @@ const MainTitle = () => {
         style={{
           color: 'white',
           width: '50%',
-          fontSize: scaledPixels(24),
+          fontSize: RFValue(8),
           fontWeight: '500',
         }}
       />

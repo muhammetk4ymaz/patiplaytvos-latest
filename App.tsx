@@ -15,6 +15,9 @@ import {theme} from './src/theme/theme';
 import CommentsView from './src/views/comments';
 import HomeView from './src/views/home';
 import MovieView from './src/views/movie';
+import RepliesView from './src/views/replies';
+import CommentView from './src/views/comment';
+import SpeedView from './src/views/speed';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -24,6 +27,9 @@ export type RootStackParamList = {
   TabNavigator: undefined;
   Movie: undefined;
   Comments: undefined;
+  Replies: undefined;
+  Comment: undefined;
+  Speed: undefined;
 };
 
 export type RootTabParamList = {
@@ -57,24 +63,46 @@ const App = () => {
   return (
     <GestureHandlerRootView>
       <NavigationContainer>
-        <View style={{height, width}}>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-              contentStyle: {backgroundColor: theme.colors.view.background},
-            }}>
-            <Stack.Screen name="TabNavigator" component={TabNavigator} />
-            <Stack.Screen name="Movie" component={MovieView} />
-            <Stack.Screen
-              name="Comments"
-              component={CommentsView}
-              options={{
-                contentStyle: {},
-                presentation: 'containedTransparentModal',
-              }}
-            />
-          </Stack.Navigator>
-        </View>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            contentStyle: {backgroundColor: theme.colors.view.background},
+          }}>
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Movie" component={MovieView} />
+          <Stack.Screen
+            name="Comments"
+            component={CommentsView}
+            options={{
+              contentStyle: {},
+              presentation: 'containedTransparentModal',
+            }}
+          />
+          <Stack.Screen
+            name="Replies"
+            component={RepliesView}
+            options={{
+              contentStyle: {},
+              presentation: 'containedTransparentModal',
+            }}
+          />
+          <Stack.Screen
+            name="Comment"
+            component={CommentView}
+            options={{
+              contentStyle: {},
+              presentation: 'containedTransparentModal',
+            }}
+          />
+          <Stack.Screen
+            name="Speed"
+            component={SpeedView}
+            options={{
+              contentStyle: {},
+              presentation: 'containedTransparentModal',
+            }}
+          />
+        </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
   );

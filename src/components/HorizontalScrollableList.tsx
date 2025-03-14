@@ -20,6 +20,7 @@ import {theme} from '../theme/theme';
 import {calculateGridItemWidth} from '../utils/calculateGridItemWidth';
 import CustomText from './CustomText';
 import {SupportedKeys} from './remote-control/SupportedKeys';
+import {textStyles} from '../constants/TextStyle';
 
 type Props = {
   listTitle: string;
@@ -95,13 +96,13 @@ const CustomList = React.forwardRef<View, Props>(
         }}>
         <CustomText
           text={listTitle}
-          style={{
-            color: 'white',
-            fontSize: scaledPixels(28),
-            fontWeight: '600',
-            marginVertical: theme.sizes.view.gap,
-            marginLeft: theme.sizes.view.horizontalPadding,
-          }}
+          style={[
+            textStyles().listTitle,
+            {
+              marginVertical: theme.sizes.view.gap,
+              marginLeft: theme.sizes.view.horizontalPadding,
+            },
+          ]}
         />
 
         <DefaultFocus>

@@ -14,6 +14,7 @@ import {MenuButton} from './MenuButton';
 import {theme} from '../../theme/theme';
 import {scaledPixels} from '../../helpers/scaledPixels';
 import CustomText from '../CustomText';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const windowDimensions = Dimensions.get('window');
 const MenuItem = ({
@@ -53,7 +54,7 @@ const MenuItem = ({
           style={{
             color: 'white',
             marginLeft: scaledPixels(16),
-            fontSize: scaledPixels(24),
+            fontSize: RFValue(8),
           }}
         />
       )}

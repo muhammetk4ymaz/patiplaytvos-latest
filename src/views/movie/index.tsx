@@ -6,27 +6,13 @@ import {
   SpatialNavigationRoot,
   SpatialNavigationView,
 } from 'react-tv-space-navigation';
-import {scaledPixels} from '../../helpers/scaledPixels';
 import {MovieProvider, useMovieContext} from './MovieContext';
 import MovieControls from './components/MovieControls';
 import PlayerIcon from './components/PlayerIcon';
-import {GoBackConfiguration} from '../../components/GoBackConfiguration';
-
-const {height, width} = Dimensions.get('window');
 
 type Props = {};
 
 const MovieViewWithProvider = () => {
-  // useEffect(() => {
-  //   const event = BackHandler.addEventListener('hardwareBackPress', () => {
-  //     return true;
-  //   });
-
-  //   return () => {
-  //     event.remove();
-  //   };
-  // }, []);
-
   return (
     <MovieProvider>
       <MovieView />
@@ -44,19 +30,19 @@ const MovieView = (props: Props) => {
   useFocusEffect(() => {
     Animated.timing(widthAnim, {
       toValue: 100,
-      duration: 1, // 1 saniye
+      duration: 100,
       useNativeDriver: false,
     }).start();
 
-    movieContext.setIsCommentVisible(false);
+    movieContext.setIsModalVisible(false);
 
     return () => {
       Animated.timing(widthAnim, {
-        toValue: 70,
-        duration: 1, // 1 saniye
+        toValue: 65,
+        duration: 100,
         useNativeDriver: false,
       }).start();
-      movieContext.setIsCommentVisible(true);
+      movieContext.setIsModalVisible(true);
     };
   });
 
@@ -67,8 +53,8 @@ const MovieView = (props: Props) => {
           style={{
             position: 'absolute',
             width: widthAnim.interpolate({
-              inputRange: [70, 100],
-              outputRange: ['70%', '100%'],
+              inputRange: [65, 100],
+              outputRange: ['65%', '100%'],
             }),
             height: '100%',
           }}>
@@ -78,16 +64,12 @@ const MovieView = (props: Props) => {
             // source={{
             //   uri: 'https://cdn.media.ccc.de/congress/2019/h264-sd/36c3-10496-deu-eng-spa-Das_Mauern_muss_weg_sd.mp4',
             // }}
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                margin: movieContext.isCommentVisible ? scaledPixels(100) : 0,
-              },
-            ]}
+            style={[StyleSheet.absoluteFill]}
             onProgress={movieContext.setProgress}
             paused={movieContext.isPaused}
             volume={0}
             repeat={true}
+            tvFocusable={true}
             onLoad={() => {
               console.log('video loaded');
               videoRef.current?.seek(0);
@@ -98,12 +80,10 @@ const MovieView = (props: Props) => {
             }}
           />
           <PlayerIcon />
-          {!movieContext.isCommentVisible && (
+          {!movieContext.isModalVisible && (
             <MovieControls videoRef={videoRef} />
           )}
         </Animated.View>
-
-        {/* {movieContext.isCommentVisible && <MovieCommentsSection />} */}
       </SpatialNavigationView>
     </SpatialNavigationRoot>
   );

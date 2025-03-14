@@ -1,5 +1,4 @@
 import mitt from 'mitt';
-import {Platform} from 'react-native';
 import {SupportedKeys} from './SupportedKeys';
 import {RemoteControlManagerInterface} from './RemoteControlManager.interface';
 

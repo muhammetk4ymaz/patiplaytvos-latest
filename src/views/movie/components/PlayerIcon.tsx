@@ -2,6 +2,7 @@ import {ActivityIndicator, View} from 'react-native';
 import {useMovieContext} from '../MovieContext';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {scaledPixels} from '../../../helpers/scaledPixels';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const PlayerIcon = () => {
   const movieContext = useMovieContext();
@@ -17,18 +18,18 @@ const PlayerIcon = () => {
       {movieContext.buffering ? (
         <ActivityIndicator size="large" color="white" />
       ) : (
-        !movieContext.isCommentVisible &&
+        !movieContext.isModalVisible &&
         movieContext.controlsVisible &&
         (movieContext.isPaused ? (
           <MaterialCommunityIcons
             name="play"
-            size={scaledPixels(70)}
+            size={RFValue(70)}
             color={'white'}
           />
         ) : (
           <MaterialCommunityIcons
             name="pause"
-            size={scaledPixels(70)}
+            size={RFValue(70)}
             color={'white'}
           />
         ))

@@ -6,6 +6,7 @@ import {useFocusAnimation} from '../helpers/useFocusAnimation';
 import {theme} from '../theme/theme';
 import {scaledPixels} from '../helpers/scaledPixels';
 import CustomText from './CustomText';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 type ButtonProps = {
   label: string;
@@ -34,8 +35,9 @@ const ButtonContent = forwardRef<View, {label: string; isFocused: boolean}>(
         ]}>
         <CustomText
           text={label}
+          weight="bold"
           style={{
-            fontSize: scaledPixels(18),
+            fontSize: RFValue(6),
             color: isFocused
               ? theme.colors.button.focusedText
               : theme.colors.button.unfocusedText,

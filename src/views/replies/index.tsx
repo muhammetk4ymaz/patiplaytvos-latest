@@ -3,18 +3,17 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {SpatialNavigationRoot} from 'react-tv-space-navigation';
 import MovieScreenModal from '../../components/MovieWithModal';
-import CommentsModal from './components/CommentsModal';
+import RepliesModal from './components/RepliesModal';
 
-const CommentsView = () => {
-  const navigation = useNavigation();
+const RepliesView = () => {
   const isFocused = useIsFocused();
   return (
     <SpatialNavigationRoot isActive={isFocused}>
-      <MovieScreenModal children={<CommentsModal />} />
+      <MovieScreenModal children={<RepliesModal />} />
     </SpatialNavigationRoot>
   );
 };
 
-export default CommentsView;
+export default RepliesView;
 
 const styles = StyleSheet.create({});

@@ -5,6 +5,7 @@ import {SpatialNavigationFocusableView} from 'react-tv-space-navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useFocusAnimation} from '../../helpers/useFocusAnimation';
 import {scaledPixels} from '../../helpers/scaledPixels';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 type ButtonProps = {
   icon: string;
@@ -32,7 +33,7 @@ const ButtonContent = forwardRef<
       ]}>
       <MaterialCommunityIcons
         name="home"
-        size={scaledPixels(24)}
+        size={RFValue(12)}
         color={isFocused && isMenuOpen ? '#111111' : '#FFFFFF'}
       />
     </Animated.View>

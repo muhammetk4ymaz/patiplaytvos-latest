@@ -20,8 +20,8 @@ interface IMovieContext {
   setIsOnlyProgressVisible: (isOnlyProgressVisible: boolean) => void;
   currentProgress: number;
   setCurrentProgress: (currentProgress: number) => void;
-  isCommentVisible: boolean;
-  setIsCommentVisible: (isCommentVisible: boolean) => void;
+  isModalVisible: boolean;
+  setIsModalVisible: (isModalVisible: boolean) => void;
 }
 
 const MovieContext = createContext<IMovieContext | undefined>(undefined);
@@ -42,7 +42,7 @@ export const MovieProvider = ({children}: {children: ReactNode}) => {
   const [isOnlyProgressVisible, setIsOnlyProgressVisible] =
     React.useState(false);
   const [currentProgress, setCurrentProgress] = React.useState(0);
-  const [isCommentVisible, setIsCommentVisible] = React.useState(false);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
 
   return (
     <MovieContext.Provider
@@ -63,8 +63,8 @@ export const MovieProvider = ({children}: {children: ReactNode}) => {
         setIsOnlyProgressVisible,
         currentProgress,
         setCurrentProgress,
-        isCommentVisible,
-        setIsCommentVisible,
+        isModalVisible,
+        setIsModalVisible,
       }}>
       {children}
     </MovieContext.Provider>

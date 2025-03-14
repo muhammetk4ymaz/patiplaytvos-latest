@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import {SupportedKeys} from './remote-control/SupportedKeys';
 import {useKey} from '../hooks/useKey';
 import {useCallback, useEffect} from 'react';
-import {BackHandler} from 'react-native';
+import {BackHandler, useTVEventHandler} from 'react-native';
 
 export const GoBackConfiguration = () => {
   const navigation = useNavigation();
@@ -22,7 +22,14 @@ export const GoBackConfiguration = () => {
     [navigation],
   );
 
-  useKey(SupportedKeys.Back, goBackOnBackPress);
+  useTVEventHandler(evt => {
+    // if (evt.eventType === 'backPress') {
+    //   if (navigation.canGoBack()) {
+    //     navigation.goBack();
+    //   }
+    // }
+    console.log('evt bb', evt);
+  });
 
   return <></>;
 };
