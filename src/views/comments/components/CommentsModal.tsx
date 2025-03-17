@@ -1,23 +1,17 @@
 import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {useEffect, useRef} from 'react';
-import {Animated, Dimensions, FlatList, View} from 'react-native';
+import {Dimensions, Platform, View} from 'react-native';
 import {
   DefaultFocus,
   SpatialNavigationFocusableView,
-  SpatialNavigationNode,
   SpatialNavigationScrollView,
-  SpatialNavigationView,
   SpatialNavigationVirtualizedList,
 } from 'react-tv-space-navigation';
 import {RootStackParamList} from '../../../../App';
 import CustomText from '../../../components/CustomText';
+import CustomDrawerModal from '../../../components/Modal/CustomDrawerModal';
 import {textStyles} from '../../../constants/TextStyle';
-import {scaledPixels} from '../../../helpers/scaledPixels';
 import {theme} from '../../../theme/theme';
-import Comment from './Comment';
-import {Platform} from 'react-native';
 import CommentWithStats from './CommentWithStats';
-import CustomDrawerModal from '../../../components/CustomDrawerModal';
 
 const CommentsModal = () => {
   return (
@@ -38,10 +32,10 @@ const Heading = () => {
         flexDirection: 'row',
         gap: Platform.select({ios: 12, android: 8}),
       }}>
-      <CustomText text="Comments" style={textStyles().sectionTitle} />
+      <CustomText text="Comments" style={textStyles().modalTitle} />
       <CustomText
         text="42"
-        style={[textStyles().sectionTitle, {fontWeight: '400'}]}
+        style={[textStyles().modalTitle, {fontWeight: '400'}]}
       />
     </View>
   );
@@ -59,7 +53,7 @@ const Comments = () => {
         orientation="vertical"
         data={arr}
         itemSize={
-          Dimensions.get('window').height * 0.25 + theme.sizes.list.columnGap
+          Dimensions.get('window').height * 0.25 + theme.sizes.list.rowGap
         }
         renderItem={({item, index}) => (
           <DefaultFocus>

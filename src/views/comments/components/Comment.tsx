@@ -4,6 +4,7 @@ import {scaledPixels} from '../../../helpers/scaledPixels';
 import CircleAvatar from '../../../components/CircleAvatar';
 import CustomText from '../../../components/CustomText';
 import {RFValue} from 'react-native-responsive-fontsize';
+import ModalItem from '../../../components/Modal/ModalItem';
 
 type Props = {
   isFocused: boolean;
@@ -13,18 +14,12 @@ type Props = {
 
 const Comment = (props: Props) => {
   return (
-    <View
-      style={{
-        height: Dimensions.get('window').height * 0.25,
-        width: Dimensions.get('window').width * 0.35 - scaledPixels(40),
-        backgroundColor: props.isFocused ? 'white' : '#212121',
-        borderRadius: scaledPixels(16),
-        padding: scaledPixels(24),
-        justifyContent: 'space-between',
-      }}>
+    <ModalItem
+      isFocused={props.isFocused}
+      height={Dimensions.get('window').height * 0.25}>
       <CommentContent isFocused={props.isFocused} />
       {props.child}
-    </View>
+    </ModalItem>
   );
 };
 

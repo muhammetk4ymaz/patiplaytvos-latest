@@ -15,7 +15,7 @@ import {scaledPixels} from '../../../helpers/scaledPixels';
 import {theme} from '../../../theme/theme';
 import CommentSection from '../../comments/components/CommentSection';
 import CommentWithStats from '../../comments/components/CommentWithStats';
-import CustomDrawerModal from '../../../components/CustomDrawerModal';
+import CustomDrawerModal from '../../../components/Modal/CustomDrawerModal';
 
 const RepliesModal = () => {
   return (
@@ -29,7 +29,7 @@ const RepliesModal = () => {
 export default RepliesModal;
 
 const Heading = () => {
-  return <CustomText text="Replies" style={textStyles().sectionTitle} />;
+  return <CustomText text="Replies" style={textStyles().modalTitle} />;
 };
 
 const Replies = () => {
@@ -39,7 +39,7 @@ const Replies = () => {
   return (
     <SpatialNavigationScrollView
       contentContainerStyle={{
-        gap: theme.sizes.list.columnGap,
+        gap: theme.sizes.list.rowGap,
       }}>
       <CommentSection />
 
@@ -48,7 +48,7 @@ const Replies = () => {
         orientation="vertical"
         data={arr}
         itemSize={
-          Dimensions.get('window').height * 0.25 + theme.sizes.list.columnGap
+          Dimensions.get('window').height * 0.25 + theme.sizes.list.rowGap
         }
         renderItem={({item, index}) => (
           <SpatialNavigationFocusableView

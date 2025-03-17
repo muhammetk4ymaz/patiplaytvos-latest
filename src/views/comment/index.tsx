@@ -4,10 +4,9 @@ import {
   SpatialNavigationRoot,
   SpatialNavigationView,
 } from 'react-tv-space-navigation';
-import CustomDrawerModal from '../../components/CustomDrawerModal';
-import CustomText from '../../components/CustomText';
-import MovieScreenModal from '../../components/MovieWithModal';
-import {textStyles} from '../../constants/TextStyle';
+
+import CustomDrawerModal from '../../components/Modal/CustomDrawerModal';
+import MovieWithModal from '../../components/MovieWithModal';
 import CommentSection from '../comments/components/CommentSection';
 
 const CommentView = () => {
@@ -17,7 +16,7 @@ const CommentView = () => {
       <SpatialNavigationView
         direction="horizontal"
         style={{width: '100%', height: '100%'}}>
-        <MovieScreenModal children={<CommentModal />} />
+        <MovieWithModal children={<CommentModal />} />
       </SpatialNavigationView>
     </SpatialNavigationRoot>
   );
@@ -27,13 +26,8 @@ export default CommentView;
 
 const CommentModal = () => {
   return (
-    <CustomDrawerModal>
-      <Heading />
+    <CustomDrawerModal title="Replies">
       <CommentSection />
     </CustomDrawerModal>
   );
-};
-
-const Heading = () => {
-  return <CustomText text="Replies" style={textStyles().sectionTitle} />;
 };

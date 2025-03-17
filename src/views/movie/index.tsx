@@ -1,30 +1,23 @@
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useRef} from 'react';
-import {Animated, BackHandler, Dimensions, StyleSheet} from 'react-native';
-import Video, {VideoRef} from 'react-native-video';
+import React, {useRef} from 'react';
+import {Animated, StyleSheet} from 'react-native';
+import {VideoRef} from 'react-native-video';
 import {
   SpatialNavigationRoot,
   SpatialNavigationView,
 } from 'react-tv-space-navigation';
-import {MovieProvider, useMovieContext} from './MovieContext';
+import {setIsModalVisible} from '../../redux/features/videoplayer/videoplayerSlice';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import MovieControls from './components/MovieControls';
+import MoviePlayer from './components/MoviePlayer';
 import PlayerIcon from './components/PlayerIcon';
 
 type Props = {};
 
-const MovieViewWithProvider = () => {
-  return (
-    <MovieProvider>
-      <MovieView />
-    </MovieProvider>
-  );
-};
-
 const MovieView = (props: Props) => {
-  const movieContext = useMovieContext();
+  const dispatch = useAppDispatch();
   const videoRef = React.useRef<VideoRef>(null);
   const widthAnim = useRef(new Animated.Value(100)).current;
-
   const focused = useIsFocused();
 
   useFocusEffect(() => {
@@ -34,7 +27,7 @@ const MovieView = (props: Props) => {
       useNativeDriver: false,
     }).start();
 
-    movieContext.setIsModalVisible(false);
+    dispatch(setIsModalVisible(false));
 
     return () => {
       Animated.timing(widthAnim, {
@@ -42,7 +35,7 @@ const MovieView = (props: Props) => {
         duration: 100,
         useNativeDriver: false,
       }).start();
-      movieContext.setIsModalVisible(true);
+      dispatch(setIsModalVisible(true));
     };
   });
 
@@ -58,37 +51,17 @@ const MovieView = (props: Props) => {
             }),
             height: '100%',
           }}>
-          <Video
-            ref={videoRef}
-            source={require('../../../assets/CivilWar.mp4')}
-            // source={{
-            //   uri: 'https://cdn.media.ccc.de/congress/2019/h264-sd/36c3-10496-deu-eng-spa-Das_Mauern_muss_weg_sd.mp4',
-            // }}
-            style={[StyleSheet.absoluteFill]}
-            onProgress={movieContext.setProgress}
-            paused={movieContext.isPaused}
-            volume={0}
-            repeat={true}
-            tvFocusable={true}
-            onLoad={() => {
-              console.log('video loaded');
-              videoRef.current?.seek(0);
-            }}
-            onBuffer={e => {
-              console.log('buffering', e);
-              movieContext.setBuffering(e.isBuffering);
-            }}
-          />
+          <MoviePlayer videoRef={videoRef} />
+
           <PlayerIcon />
-          {!movieContext.isModalVisible && (
-            <MovieControls videoRef={videoRef} />
-          )}
+
+          <MovieControls videoRef={videoRef} />
         </Animated.View>
       </SpatialNavigationView>
     </SpatialNavigationRoot>
   );
 };
 
-export default MovieViewWithProvider;
+export default MovieView;
 
 const styles = StyleSheet.create({});

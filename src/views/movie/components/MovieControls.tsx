@@ -1,4 +1,8 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {
   Animated,
@@ -25,16 +29,28 @@ import CustomText from '../../../components/CustomText';
 import RemoteControlManager from '../../../components/remote-control/RemoteControlManager';
 import {SupportedKeys} from '../../../components/remote-control/SupportedKeys';
 import {scaledPixels} from '../../../helpers/scaledPixels';
+import {
+  setControlsVisible,
+  setCurretProgress,
+  setIsModalVisible,
+  setOnlyProgressVisible,
+  setPaused,
+  setProgressFocused,
+} from '../../../redux/features/videoplayer/videoplayerSlice';
+import {useAppDispatch, useAppSelector} from '../../../redux/hooks';
 import {theme} from '../../../theme/theme';
-import {useMovieContext} from '../MovieContext';
 
 type Props = {
   videoRef: React.RefObject<VideoRef>;
 };
 
 const MovieControls = (props: Props) => {
-  const movieContext = useMovieContext();
-  const controlsVisible = movieContext.controlsVisible;
+  const controlsVisible = useAppSelector(
+    state => state.videoplayer,
+  ).controlsVisible;
+  const isModalVisible = useAppSelector(
+    state => state.videoplayer,
+  ).isModalVisible;
   return (
     <SpatialNavigationView
       direction="vertical"
@@ -45,7 +61,11 @@ const MovieControls = (props: Props) => {
       }}>
       <Animated.View
         style={{
-          display: controlsVisible ? 'flex' : 'none',
+          display: !isModalVisible
+            ? controlsVisible
+              ? 'flex'
+              : 'none'
+            : 'none',
           paddingHorizontal: theme.sizes.view.horizontalPadding,
           paddingBottom: scaledPixels(48),
         }}>
@@ -80,9 +100,13 @@ const formatTime = (durationSeconds: number) => {
 };
 
 const MovieTimeInfo = () => {
-  const movieContext = useMovieContext();
+  const isOnlyProgressVisible = useAppSelector(
+    state => state.videoplayer,
+  ).isOnlyProgressVisible;
+
+  const progress = useAppSelector(state => state.videoplayer.progress);
   return (
-    !movieContext.isOnlyProgressVisible && (
+    !isOnlyProgressVisible && (
       <SpatialNavigationNode>
         <SpatialNavigationView
           direction="horizontal"
@@ -91,14 +115,14 @@ const MovieTimeInfo = () => {
             justifyContent: 'space-between',
           }}>
           <CustomText
-            text={formatTime(movieContext.progress.currentTime)}
+            text={formatTime(progress.currentTime)}
             style={{
               color: 'darkgray',
               fontSize: RFValue(6),
             }}
           />
           <CustomText
-            text={formatTime(movieContext.progress.seekableDuration)}
+            text={formatTime(progress.seekableDuration)}
             style={{
               color: 'darkgray',
               fontSize: RFValue(6),
@@ -111,18 +135,40 @@ const MovieTimeInfo = () => {
 };
 
 const MovieButtons = () => {
-  const movieContext = useMovieContext();
+  const isOnlyProgressVisible = useAppSelector(
+    state => state.videoplayer,
+  ).isOnlyProgressVisible;
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute();
+  const dispatch = useAppDispatch();
+
   return (
-    !movieContext.isOnlyProgressVisible && (
+    !isOnlyProgressVisible && (
       <SpatialNavigationNode>
-        <SpatialNavigationView direction="horizontal" style={{gap: 24}}>
+        <SpatialNavigationView
+          direction="horizontal"
+          style={{gap: theme.sizes.list.columnGap}}>
+          <Button
+            label="Speed"
+            onSelect={() => {
+              navigation.navigate('Speed');
+              dispatch(setIsModalVisible(true));
+            }}
+          />
+          <Button
+            label="Subtitles & Voiceover"
+            onSelect={() => {
+              console.log('Subtitles & Voiceover');
+              // navigation.navigate('Alt Yazı & Seslendirme');
+              dispatch(setIsModalVisible(true));
+            }}
+          />
           <Button
             label="Comments"
             onSelect={() => {
               console.log('Comment');
               navigation.navigate('Comments');
-              movieContext.setIsModalVisible(true);
+              dispatch(setIsModalVisible(true));
             }}
           />
           <Button
@@ -131,14 +177,6 @@ const MovieButtons = () => {
               console.log('Episodes');
             }}
           />
-          <Button
-            label="Speed"
-            onSelect={() => {
-              navigation.navigate('Speed');
-              movieContext.setIsModalVisible(true);
-            }}
-          />
-          <Button label="Enjoy Now" onSelect={() => {}} />
         </SpatialNavigationView>
       </SpatialNavigationNode>
     )
@@ -146,37 +184,52 @@ const MovieButtons = () => {
 };
 
 const ProgressSlider = (props: Props) => {
-  const movieContext = useMovieContext();
+  const dispatch = useAppDispatch();
+  const progress = useAppSelector(state => state.videoplayer.progress);
+  const controlsVisible = useAppSelector(
+    state => state.videoplayer.controlsVisible,
+  );
+  const progressFocused = useAppSelector(
+    state => state.videoplayer.progressFocused,
+  );
+  const currentProgress = useAppSelector(
+    state => state.videoplayer.currentProgress,
+  );
+  const isOnlyProgressVisible = useAppSelector(
+    state => state.videoplayer.isOnlyProgressVisible,
+  );
+  const paused = useAppSelector(state => state.videoplayer.paused);
+
   const forwardIntervalId = React.useRef<NodeJS.Timeout | null>(null);
   const backwardIntervalId = React.useRef<NodeJS.Timeout | null>(null);
-  const sliderProgress = useSharedValue(movieContext.progress.currentTime);
+  const sliderProgress = useSharedValue(progress.currentTime);
   const min = useSharedValue(0);
-  const max = useSharedValue(movieContext.progress.seekableDuration);
-  const cache = useSharedValue(movieContext.progress.playableDuration);
-  const currentProgress = movieContext.currentProgress;
+  const max = useSharedValue(progress.seekableDuration);
+  const cache = useSharedValue(progress.playableDuration);
 
   // Propstan gelen dataların değişimlerini takip eder
   React.useEffect(() => {
-    sliderProgress.value = movieContext.progress.currentTime;
-    cache.value = movieContext.progress.playableDuration;
-    max.value = movieContext.progress.seekableDuration;
-    movieContext.setCurrentProgress(movieContext.progress.currentTime);
+    sliderProgress.value = progress.currentTime;
+    cache.value = progress.playableDuration;
+    max.value = progress.seekableDuration;
+    dispatch(setCurretProgress(progress.currentTime));
   }, [
-    movieContext.progress.currentTime,
-    movieContext.progress.playableDuration,
-    movieContext.progress.seekableDuration,
+    progress.currentTime,
+    progress.playableDuration,
+    progress.seekableDuration,
   ]);
 
   // İleri sarma işlemi
   const forwardProgress = (duration: number) => {
-    movieContext.setIsPaused(true);
-    movieContext.setIsOnlyProgressVisible(true);
+    dispatch(setPaused(true));
+    dispatch(setOnlyProgressVisible(true));
+
     if (sliderProgress.value + duration > max.value) {
       sliderProgress.value = withTiming(max.value, {duration: 100});
-      movieContext.setCurrentProgress(max.value);
+      dispatch(setCurretProgress(max.value));
       return;
     } else {
-      movieContext.setCurrentProgress(sliderProgress.value + duration);
+      dispatch(setCurretProgress(sliderProgress.value + duration));
       sliderProgress.value = withTiming(
         sliderProgress.value + duration,
         {
@@ -190,14 +243,14 @@ const ProgressSlider = (props: Props) => {
 
   // Geri sarma işlemi
   const backwardProgress = (duration: number) => {
-    movieContext.setIsPaused(true);
-    movieContext.setIsOnlyProgressVisible(true);
+    dispatch(setPaused(true));
+    dispatch(setOnlyProgressVisible(true));
     if (sliderProgress.value - duration < 0) {
-      movieContext.setCurrentProgress(0);
+      dispatch(setCurretProgress(0));
       sliderProgress.value = withTiming(0, {duration: 100});
       return;
     } else {
-      movieContext.setCurrentProgress(sliderProgress.value - duration);
+      dispatch(setCurretProgress(sliderProgress.value - duration));
       sliderProgress.value = withTiming(
         sliderProgress.value - duration,
         {duration: 100},
@@ -213,7 +266,7 @@ const ProgressSlider = (props: Props) => {
       // İleri ve geri sarma işlemleri için kullanılacak süre
       const duration = 10;
 
-      if (movieContext.controlsVisible && movieContext.progressFocused) {
+      if (controlsVisible && progressFocused) {
         switch (pressedKey) {
           case SupportedKeys.Left:
             backwardProgress(duration);
@@ -222,14 +275,14 @@ const ProgressSlider = (props: Props) => {
             forwardProgress(duration);
             break;
           default:
-            movieContext.setIsOnlyProgressVisible(false);
+            dispatch(setOnlyProgressVisible(false));
             break;
         }
       }
 
-      if (!movieContext.controlsVisible) {
-        movieContext.setControlsVisible(!movieContext.controlsVisible);
-        console.log('Controls Visible', movieContext.controlsVisible);
+      if (!controlsVisible) {
+        dispatch(setControlsVisible(!controlsVisible));
+        console.log('Controls Visible', controlsVisible);
       }
     };
 
@@ -238,12 +291,12 @@ const ProgressSlider = (props: Props) => {
     return () => {
       RemoteControlManager.removeKeydownListener(remoteControlListener);
     };
-  }, [movieContext.progressFocused, movieContext.controlsVisible]);
+  }, [progressFocused, controlsVisible]);
 
   const handleLongPressRight = () => {
-    if (movieContext.controlsVisible) {
-      movieContext.setIsPaused(true);
-      movieContext.setIsOnlyProgressVisible(true);
+    if (controlsVisible) {
+      dispatch(setPaused(true));
+      dispatch(setOnlyProgressVisible(true));
       let counter = 0;
       forwardIntervalId.current = setInterval(() => {
         counter++;
@@ -259,9 +312,9 @@ const ProgressSlider = (props: Props) => {
   };
 
   const handleLongPressLeft = () => {
-    if (movieContext.controlsVisible) {
-      movieContext.setIsPaused(true);
-      movieContext.setIsOnlyProgressVisible(true);
+    if (controlsVisible) {
+      dispatch(setPaused(true));
+      dispatch(setOnlyProgressVisible(true));
       let counter = 0;
       backwardIntervalId.current = setInterval(() => {
         counter++;
@@ -296,15 +349,15 @@ const ProgressSlider = (props: Props) => {
         stopLongPressLeft();
       }
     });
-  }, [movieContext.controlsVisible]);
+  }, [controlsVisible]);
 
   const startProgressWidth =
-    (currentProgress / movieContext.progress.seekableDuration) *
+    (currentProgress / progress.seekableDuration) *
     (Dimensions.get('window').width - 48);
 
   const endProgressWidth =
-    ((movieContext.progress.seekableDuration - currentProgress) /
-      movieContext.progress.seekableDuration) *
+    ((progress.seekableDuration - currentProgress) /
+      progress.seekableDuration) *
     (Dimensions.get('window').width - 48);
 
   return (
@@ -316,9 +369,7 @@ const ProgressSlider = (props: Props) => {
       <View
         style={{
           display:
-            movieContext.isOnlyProgressVisible && startProgressWidth < 85
-              ? 'flex'
-              : 'none',
+            isOnlyProgressVisible && startProgressWidth < 85 ? 'flex' : 'none',
           position: 'absolute',
           width: 200,
           gap: 12,
@@ -339,9 +390,7 @@ const ProgressSlider = (props: Props) => {
       <View
         style={{
           display:
-            movieContext.isOnlyProgressVisible && endProgressWidth < 85
-              ? 'flex'
-              : 'none',
+            isOnlyProgressVisible && endProgressWidth < 85 ? 'flex' : 'none',
           position: 'absolute',
           width: 200,
           gap: 12,
@@ -374,7 +423,7 @@ const ProgressSlider = (props: Props) => {
             <View>
               <Animated.View
                 style={{
-                  display: movieContext.isOnlyProgressVisible
+                  display: isOnlyProgressVisible
                     ? startProgressWidth < 85 || endProgressWidth < 85
                       ? 'none'
                       : 'flex'
@@ -406,15 +455,15 @@ const ProgressSlider = (props: Props) => {
                   isTVSelectable: true,
                 }}
                 style={{flex: 1}}
-                onFocus={() => movieContext.setProgressFocused(true)}
-                onBlur={() => movieContext.setProgressFocused(false)}
+                onFocus={() => dispatch(setProgressFocused(true))}
+                onBlur={() => dispatch(setProgressFocused(false))}
                 onSelect={() => {
-                  if (movieContext.isPaused) {
+                  if (paused) {
                     props.videoRef.current?.seek(sliderProgress.value);
-                    movieContext.setIsOnlyProgressVisible(false);
-                    movieContext.setIsPaused(false);
+                    dispatch(setOnlyProgressVisible(false));
+                    dispatch(setPaused(false));
                   } else {
-                    movieContext.setIsPaused(true);
+                    dispatch(setPaused(true));
                   }
                 }}
                 children={({isFocused}) => (

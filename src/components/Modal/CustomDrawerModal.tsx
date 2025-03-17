@@ -1,12 +1,19 @@
 import {useEffect, useRef} from 'react';
 import {Animated, View} from 'react-native';
 
-import {SpatialNavigationNode} from 'react-tv-space-navigation';
-import {scaledPixels} from '../helpers/scaledPixels';
-import {theme} from '../theme/theme';
+import {
+  DefaultFocus,
+  SpatialNavigationNode,
+  SpatialNavigationView,
+} from 'react-tv-space-navigation';
+import {scaledPixels} from '../../helpers/scaledPixels';
+import {theme} from '../../theme/theme';
+import CustomText from '../CustomText';
+import {textStyles} from '../../constants/TextStyle';
 
 type Props = {
   children: React.ReactNode;
+  title?: string;
 };
 
 const CustomDrawerModal = (props: Props) => {
@@ -46,6 +53,9 @@ const CustomDrawerModal = (props: Props) => {
             backgroundColor: 'black',
             gap: theme.sizes.view.gap,
           }}>
+          {props.title && (
+            <CustomText text={props.title} style={textStyles().modalTitle} />
+          )}
           {props.children}
         </View>
       </Animated.View>

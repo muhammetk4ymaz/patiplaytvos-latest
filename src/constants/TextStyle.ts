@@ -32,7 +32,7 @@ export const textStyles = function (): {
       fontSize: scaledPixels(28),
       fontWeight: '600',
     },
-    sectionTitle: {
+    modalTitle: {
       color: 'white',
       fontSize: RFValue(10),
       fontWeight: 'bold',

@@ -18,6 +18,8 @@ import MovieView from './src/views/movie';
 import RepliesView from './src/views/replies';
 import CommentView from './src/views/comment';
 import SpeedView from './src/views/speed';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -25,7 +27,7 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export type RootStackParamList = {
   TabNavigator: undefined;
-  Movie: undefined;
+  Movie: {speed: number};
   Comments: undefined;
   Replies: undefined;
   Comment: undefined;
@@ -61,50 +63,52 @@ const App = () => {
   const {height, width} = useWindowDimensions();
 
   return (
-    <GestureHandlerRootView>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {backgroundColor: theme.colors.view.background},
-          }}>
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Movie" component={MovieView} />
-          <Stack.Screen
-            name="Comments"
-            component={CommentsView}
-            options={{
-              contentStyle: {},
-              presentation: 'containedTransparentModal',
-            }}
-          />
-          <Stack.Screen
-            name="Replies"
-            component={RepliesView}
-            options={{
-              contentStyle: {},
-              presentation: 'containedTransparentModal',
-            }}
-          />
-          <Stack.Screen
-            name="Comment"
-            component={CommentView}
-            options={{
-              contentStyle: {},
-              presentation: 'containedTransparentModal',
-            }}
-          />
-          <Stack.Screen
-            name="Speed"
-            component={SpeedView}
-            options={{
-              contentStyle: {},
-              presentation: 'containedTransparentModal',
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <Provider store={store}>
+      <GestureHandlerRootView>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {backgroundColor: theme.colors.view.background},
+            }}>
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen name="Movie" component={MovieView} />
+            <Stack.Screen
+              name="Comments"
+              component={CommentsView}
+              options={{
+                contentStyle: {},
+                presentation: 'containedTransparentModal',
+              }}
+            />
+            <Stack.Screen
+              name="Replies"
+              component={RepliesView}
+              options={{
+                contentStyle: {},
+                presentation: 'containedTransparentModal',
+              }}
+            />
+            <Stack.Screen
+              name="Comment"
+              component={CommentView}
+              options={{
+                contentStyle: {},
+                presentation: 'containedTransparentModal',
+              }}
+            />
+            <Stack.Screen
+              name="Speed"
+              component={SpeedView}
+              options={{
+                contentStyle: {},
+                presentation: 'containedTransparentModal',
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </Provider>
   );
 };
 

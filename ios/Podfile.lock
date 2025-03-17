@@ -1209,8 +1209,6 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-keyevent (0.3.2):
-    - React
   - react-native-safe-area-context (5.3.0):
     - DoubleConversion
     - glog
@@ -1874,7 +1872,6 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-keyevent (from `../node_modules/react-native-keyevent`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1990,8 +1987,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
-  react-native-keyevent:
-    :path: "../node_modules/react-native-keyevent"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-video:
@@ -2102,7 +2097,6 @@ SPEC CHECKSUMS:
   React-logger: ef81e26d6cb91fb37c6c5c3627dc2253bba8dc35
   React-Mapbuffer: 593f220260cec38c93a2ca4f827f920961ed43f9
   React-microtasksnativemodule: 246df9a832ec8b99e6b0dea6af81a723a9bea1b4
-  react-native-keyevent: b546896a528d3f4afe4fa3c89b82748dfdfcc2c1
   react-native-safe-area-context: 0f14bce545abcdfbff79ce2e3c78c109f0be283e
   react-native-video: 80b56ba42f736957ee5865b60a34486c24931fa2
   React-nativeconfig: 7524b56869e8538c7997f91dad63734325a1e142

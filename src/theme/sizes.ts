@@ -12,6 +12,6 @@ export const sizes = {
   },
   list: {
     columnGap: scaledPixels(18),
-    rowGap: scaledPixels(24),
+    rowGap: scaledPixels(16),
   },
 };

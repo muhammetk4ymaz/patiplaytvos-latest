@@ -1,11 +1,18 @@
 import {ActivityIndicator, View} from 'react-native';
-import {useMovieContext} from '../MovieContext';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {scaledPixels} from '../../../helpers/scaledPixels';
 import {RFValue} from 'react-native-responsive-fontsize';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useAppSelector} from '../../../redux/hooks';
 
 const PlayerIcon = () => {
-  const movieContext = useMovieContext();
+  const buffering = useAppSelector(state => state.videoplayer).buffering;
+  const isModalVisible = useAppSelector(
+    state => state.videoplayer,
+  ).isModalVisible;
+  const controlsVisible = useAppSelector(
+    state => state.videoplayer,
+  ).controlsVisible;
+  const paused = useAppSelector(state => state.videoplayer).paused;
+
   return (
     <View
       style={{
@@ -15,12 +22,12 @@ const PlayerIcon = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      {movieContext.buffering ? (
+      {buffering ? (
         <ActivityIndicator size="large" color="white" />
       ) : (
-        !movieContext.isModalVisible &&
-        movieContext.controlsVisible &&
-        (movieContext.isPaused ? (
+        !isModalVisible &&
+        controlsVisible &&
+        (paused ? (
           <MaterialCommunityIcons
             name="play"
             size={RFValue(70)}
