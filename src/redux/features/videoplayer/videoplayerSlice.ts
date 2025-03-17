@@ -7,6 +7,14 @@ interface Subtitle {
   text: string;
 }
 
+export interface AudioTrack {
+  type?: string;
+  value?: number;
+  language?: string;
+  selected?: boolean;
+  index?: number;
+}
+
 export interface TextTrack {
   index: number;
   // title?: string;
@@ -25,13 +33,11 @@ export interface VideoPlayerState {
   pressed: boolean;
   paused: boolean;
   audioTrack: number;
-  // audioTrackList: AudioTrack[];
+  audioTrackList: AudioTrack[];
   speed: number;
   speedSettingsVisible: boolean;
   quality: number;
   qualitySettingsVisible: boolean;
-  // qualityList: VideoQuality[];
-  autoQuality: boolean;
   progress: OnProgressData;
   currentProgress: number;
   subtitleIndex: number;
@@ -57,13 +63,11 @@ const initialState: VideoPlayerState = {
   pressed: true,
   paused: false,
   audioTrack: 0,
-  // audioTrackList: [],
+  audioTrackList: [],
   speed: 1,
   speedSettingsVisible: false,
   quality: 0,
   qualitySettingsVisible: false,
-  // qualityList: [],
-  autoQuality: true,
   progress: {
     currentTime: 0,
     playableDuration: 0,
@@ -122,9 +126,9 @@ export const videoplayerSlice = createSlice({
     setTextTrackList: (state, action: PayloadAction<TextTrack[]>) => {
       state.textTrackList = action.payload;
     },
-    // setAudioTrackList: (state, action: PayloadAction<AudioTrack[]>) => {
-    //   state.audioTrackList = action.payload;
-    // },
+    setAudioTrackList: (state, action: PayloadAction<AudioTrack[]>) => {
+      state.audioTrackList = action.payload;
+    },
     setSpeed: (state, action: PayloadAction<number>) => {
       state.speed = action.payload;
     },
@@ -137,12 +141,6 @@ export const videoplayerSlice = createSlice({
     setQualitySettingsVisible: (state, action: PayloadAction<boolean>) => {
       state.qualitySettingsVisible = action.payload;
     },
-    setAutoQuality: (state, action: PayloadAction<boolean>) => {
-      state.autoQuality = action.payload;
-    },
-    // setQualityList: (state, action: PayloadAction<VideoQuality[]>) => {
-    //   state.qualityList = action.payload;
-    // },
     setProgress: (state, action: PayloadAction<OnProgressData>) => {
       state.progress = action.payload;
     },
@@ -203,13 +201,11 @@ export const {
   setPressed,
   setPaused,
   setAudioTrack,
-  // setAudioTrackList,
+  setAudioTrackList,
   setSpeed,
   setSpeedSettingsVisible,
   setQuality,
   setQualitySettingsVisible,
-  setAutoQuality,
-  // setQualityList,
   setProgress,
   setTextTrackList,
   setSubtitleIndex,

@@ -147,7 +147,7 @@ const MovieButtons = () => {
       <SpatialNavigationNode>
         <SpatialNavigationView
           direction="horizontal"
-          style={{gap: theme.sizes.list.columnGap}}>
+          style={{gap: theme.sizes.view.columnGap}}>
           <Button
             label="Speed"
             onSelect={() => {
@@ -158,9 +158,8 @@ const MovieButtons = () => {
           <Button
             label="Subtitles & Voiceover"
             onSelect={() => {
-              console.log('Subtitles & Voiceover');
-              // navigation.navigate('Alt Yazı & Seslendirme');
-              dispatch(setIsModalVisible(true));
+              navigation.navigate('SubtitleAndAudio');
+              dispatch(setPaused(true));
             }}
           />
           <Button

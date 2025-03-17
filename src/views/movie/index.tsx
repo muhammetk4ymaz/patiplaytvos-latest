@@ -1,4 +1,9 @@
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {
+  NavigationProp,
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import React, {useRef} from 'react';
 import {Animated, StyleSheet} from 'react-native';
 import {VideoRef} from 'react-native-video';
@@ -11,6 +16,8 @@ import {useAppDispatch, useAppSelector} from '../../redux/hooks';
 import MovieControls from './components/MovieControls';
 import MoviePlayer from './components/MoviePlayer';
 import PlayerIcon from './components/PlayerIcon';
+import {RootStackParamList} from '../../../App';
+import MovieSubtitle from './components/MovieSubtitle';
 
 type Props = {};
 
@@ -19,6 +26,9 @@ const MovieView = (props: Props) => {
   const videoRef = React.useRef<VideoRef>(null);
   const widthAnim = useRef(new Animated.Value(100)).current;
   const focused = useIsFocused();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  console.log('Rendered MovieView');
 
   useFocusEffect(() => {
     Animated.timing(widthAnim, {
@@ -30,12 +40,18 @@ const MovieView = (props: Props) => {
     dispatch(setIsModalVisible(false));
 
     return () => {
-      Animated.timing(widthAnim, {
-        toValue: 65,
-        duration: 100,
-        useNativeDriver: false,
-      }).start();
-      dispatch(setIsModalVisible(true));
+      const currentState = navigation.getState();
+      const currentStateIndex = currentState.index;
+      const nextScreenName = currentState.routes[currentStateIndex].name;
+
+      if (nextScreenName !== 'SubtitleAndAudio') {
+        Animated.timing(widthAnim, {
+          toValue: 65,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        dispatch(setIsModalVisible(true));
+      }
     };
   });
 
@@ -56,6 +72,7 @@ const MovieView = (props: Props) => {
           <PlayerIcon />
 
           <MovieControls videoRef={videoRef} />
+          <MovieSubtitle />
         </Animated.View>
       </SpatialNavigationView>
     </SpatialNavigationRoot>

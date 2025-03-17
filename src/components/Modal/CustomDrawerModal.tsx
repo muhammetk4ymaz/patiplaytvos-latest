@@ -51,7 +51,7 @@ const CustomDrawerModal = (props: Props) => {
             flex: 1,
             padding: scaledPixels(20),
             backgroundColor: 'black',
-            gap: theme.sizes.view.gap,
+            gap: theme.sizes.view.rowGap,
           }}>
           {props.title && (
             <CustomText text={props.title} style={textStyles().modalTitle} />

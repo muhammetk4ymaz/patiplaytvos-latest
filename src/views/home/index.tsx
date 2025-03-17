@@ -97,7 +97,7 @@ const MainTitle = () => {
         backgroundColor: theme.colors.view.background,
         justifyContent: 'center',
         paddingHorizontal: theme.sizes.view.horizontalPadding,
-        gap: theme.sizes.view.gap,
+        gap: theme.sizes.view.rowGap,
       }}>
       <Video
         source={require('../../../assets/CivilWar.mp4')}

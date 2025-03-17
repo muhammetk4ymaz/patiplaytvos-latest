@@ -7,7 +7,8 @@ export const sizes = {
     icon: scaledPixels(20),
   },
   view: {
-    gap: scaledPixels(24),
+    columnGap: scaledPixels(16),
+    rowGap: scaledPixels(24),
     horizontalPadding: scaledPixels(48),
   },
   list: {

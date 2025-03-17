@@ -28,7 +28,7 @@ export const GoBackConfiguration = () => {
     //     navigation.goBack();
     //   }
     // }
-    console.log('evt bb', evt);
+    // console.log('evt bb', evt);
   });
 
   return <></>;

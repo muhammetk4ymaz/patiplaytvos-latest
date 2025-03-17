@@ -30,7 +30,7 @@ const SpeedModal = () => {
         {speedOptions.map((option, index) => {
           if (option.value === speed) {
             return (
-              <DefaultFocus>
+              <DefaultFocus key={index}>
                 <SpeedOptionItem option={option} />
               </DefaultFocus>
             );

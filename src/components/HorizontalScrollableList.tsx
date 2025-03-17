@@ -99,7 +99,7 @@ const CustomList = React.forwardRef<View, Props>(
           style={[
             textStyles().listTitle,
             {
-              marginVertical: theme.sizes.view.gap,
+              marginVertical: theme.sizes.view.rowGap,
               marginLeft: theme.sizes.view.horizontalPadding,
             },
           ]}
@@ -151,7 +151,7 @@ const CustomList = React.forwardRef<View, Props>(
                             }}
                           />
                         </Animated.View>
-                        <View style={{width: theme.sizes.view.gap}} />
+                        <View style={{width: theme.sizes.view.rowGap}} />
                       </View>
                     );
                   }}

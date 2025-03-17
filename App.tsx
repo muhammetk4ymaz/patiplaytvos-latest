@@ -20,6 +20,7 @@ import CommentView from './src/views/comment';
 import SpeedView from './src/views/speed';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store';
+import SubtitleAndAudioView from './src/views/subtitleandaudio';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -27,11 +28,12 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export type RootStackParamList = {
   TabNavigator: undefined;
-  Movie: {speed: number};
+  Movie: undefined;
   Comments: undefined;
   Replies: undefined;
   Comment: undefined;
   Speed: undefined;
+  SubtitleAndAudio: undefined;
 };
 
 export type RootTabParamList = {
@@ -104,6 +106,10 @@ const App = () => {
                 contentStyle: {},
                 presentation: 'containedTransparentModal',
               }}
+            />
+            <Stack.Screen
+              name="SubtitleAndAudio"
+              component={SubtitleAndAudioView}
             />
           </Stack.Navigator>
         </NavigationContainer>
