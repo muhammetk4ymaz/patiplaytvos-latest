@@ -25,6 +25,7 @@ const MovieView = (props: Props) => {
   const dispatch = useAppDispatch();
   const videoRef = React.useRef<VideoRef>(null);
   const widthAnim = useRef(new Animated.Value(100)).current;
+  const heightAnim = useRef(new Animated.Value(100)).current;
   const focused = useIsFocused();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -37,6 +38,12 @@ const MovieView = (props: Props) => {
       useNativeDriver: false,
     }).start();
 
+    Animated.timing(heightAnim, {
+      toValue: 100,
+      duration: 100,
+      useNativeDriver: false,
+    }).start();
+
     dispatch(setIsModalVisible(false));
 
     return () => {
@@ -44,8 +51,18 @@ const MovieView = (props: Props) => {
       const currentStateIndex = currentState.index;
       const nextScreenName = currentState.routes[currentStateIndex].name;
 
-      if (nextScreenName !== 'SubtitleAndAudio') {
+      if (
+        nextScreenName !== 'SubtitleAndAudio' &&
+        nextScreenName !== 'Episodes'
+      ) {
         Animated.timing(widthAnim, {
+          toValue: 65,
+          duration: 100,
+          useNativeDriver: false,
+        }).start();
+        dispatch(setIsModalVisible(true));
+      } else if (nextScreenName === 'Episodes') {
+        Animated.timing(heightAnim, {
           toValue: 65,
           duration: 100,
           useNativeDriver: false,
@@ -65,7 +82,10 @@ const MovieView = (props: Props) => {
               inputRange: [65, 100],
               outputRange: ['65%', '100%'],
             }),
-            height: '100%',
+            height: heightAnim.interpolate({
+              inputRange: [65, 100],
+              outputRange: ['65%', '100%'],
+            }),
           }}>
           <MoviePlayer videoRef={videoRef} />
 

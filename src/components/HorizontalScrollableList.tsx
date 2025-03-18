@@ -126,7 +126,7 @@ const CustomList = React.forwardRef<View, Props>(
                     isTVSelectable: true,
                   }}
                   onSelect={() => {
-                    navigation.navigate('Movie');
+                    navigation.navigate('Title');
                   }}
                   children={({isFocused}) => {
                     const scaleAnimation = useFocusAnimation(isFocused);

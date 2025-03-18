@@ -17,6 +17,8 @@ import {Page} from '../../components/Page';
 import {scaledPixels} from '../../helpers/scaledPixels';
 import {theme} from '../../theme/theme';
 import {RFValue} from 'react-native-responsive-fontsize';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../../App';
 
 const HomeView = () => {
   const {isOpen: isMenuOpen} = useMenuContext();
@@ -88,6 +90,7 @@ export default HomeView;
 
 const MainTitle = () => {
   const {height, width} = useWindowDimensions();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <SpatialNavigationView
       direction="vertical"
@@ -138,7 +141,7 @@ const MainTitle = () => {
             label="Enjoy Now"
             additionalOffset={1000}
             onSelect={() => {
-              console.log('Enjoy Now');
+              navigation.navigate('Movie');
             }}
           />
         </DefaultFocus>

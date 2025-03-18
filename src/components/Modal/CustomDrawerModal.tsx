@@ -14,10 +14,12 @@ import {textStyles} from '../../constants/TextStyle';
 type Props = {
   children: React.ReactNode;
   title?: string;
+  direction?: 'horizontal' | 'vertical';
 };
 
 const CustomDrawerModal = (props: Props) => {
   const widthAnim = useRef(new Animated.Value(0)).current;
+  const heightAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -34,16 +36,39 @@ const CustomDrawerModal = (props: Props) => {
     }).start();
   }, [widthAnim]);
 
+  useEffect(() => {
+    Animated.timing(heightAnim, {
+      toValue: 35,
+      duration: 1, // 1 saniye
+      useNativeDriver: false,
+    }).start();
+
+    Animated.timing(opacityAnim, {
+      toValue: 1,
+      duration: 1, // 1 saniye
+      useNativeDriver: false,
+    }).start();
+  }, [heightAnim]);
+
   return (
     <SpatialNavigationNode>
       <Animated.View
         style={{
           opacity: opacityAnim,
-          width: widthAnim.interpolate({
-            inputRange: [0, 35],
-            outputRange: ['0%', '35%'],
-          }),
-          height: '100%',
+          width:
+            props.direction !== 'vertical'
+              ? widthAnim.interpolate({
+                  inputRange: [0, 35],
+                  outputRange: ['0%', '35%'],
+                })
+              : '100%',
+          height:
+            props.direction === 'vertical'
+              ? heightAnim.interpolate({
+                  inputRange: [0, 35],
+                  outputRange: ['0%', '35%'],
+                })
+              : '100%',
           backgroundColor: 'black',
         }}>
         <View

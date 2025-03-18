@@ -25,6 +25,7 @@ const MoviePlayer = (props: Props) => {
         uri: 'https://cdn.media.ccc.de/congress/2019/h264-sd/36c3-10496-deu-eng-spa-Das_Mauern_muss_weg_sd.mp4',
       }}
       style={[StyleSheet.absoluteFill]}
+      resizeMode="stretch"
       onProgress={e => dispatch(setProgress(e))}
       paused={paused}
       volume={1}

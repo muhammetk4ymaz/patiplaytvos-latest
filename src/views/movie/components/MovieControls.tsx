@@ -173,7 +173,8 @@ const MovieButtons = () => {
           <Button
             label="Episodes"
             onSelect={() => {
-              console.log('Episodes');
+              navigation.navigate('Episodes');
+              dispatch(setIsModalVisible(true));
             }}
           />
         </SpatialNavigationView>

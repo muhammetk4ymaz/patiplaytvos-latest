@@ -12,13 +12,14 @@ import {RootStackParamList} from '../../App';
 
 type Props = {
   children: React.ReactNode;
+  direction?: 'horizontal' | 'vertical';
 };
 
-const MovieScreenModal = (props: Props) => {
+const MovieWithModal = (props: Props) => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <SpatialNavigationView
-      direction="horizontal"
+      direction={props.direction || 'horizontal'}
       style={{width: '100%', height: '100%'}}>
       <SpatialNavigationNode>
         <SpatialNavigationFocusableView
@@ -53,6 +54,6 @@ const MovieScreenModal = (props: Props) => {
   );
 };
 
-export default MovieScreenModal;
+export default MovieWithModal;
 
 const styles = StyleSheet.create({});
