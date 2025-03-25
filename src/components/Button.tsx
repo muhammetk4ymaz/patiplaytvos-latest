@@ -37,7 +37,7 @@ const ButtonContent = forwardRef<View, {label: string; isFocused: boolean}>(
           text={label}
           weight="bold"
           style={{
-            fontSize: RFValue(6),
+            fontSize: scaledPixels(18),
             color: isFocused
               ? theme.colors.button.focusedText
               : theme.colors.button.unfocusedText,

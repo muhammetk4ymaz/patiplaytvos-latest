@@ -169,7 +169,7 @@ const IconButton = ({
         alignItems: 'center',
         padding: Platform.select({ios: 12, android: 8}),
         borderRadius: 99,
-        backgroundColor: isFocused ? 'white' : '#212121',
+        // backgroundColor: isFocused ? 'white' : '#212121',
       }}>
       {icon}
     </View>

@@ -21,13 +21,17 @@ import {calculateGridItemWidth} from '../utils/calculateGridItemWidth';
 import CustomText from './CustomText';
 import {SupportedKeys} from './remote-control/SupportedKeys';
 import {textStyles} from '../constants/TextStyle';
+import FocusablePoster from './Custom/FocusablePoster';
 
 type Props = {
-  listTitle: string;
+  listTitle?: string;
+  listTitleComponent?: React.ReactNode;
+  listTitleHeight?: number;
   imagePaths: string[];
   aspectRatio: number;
   viewableItems: number;
   isActive?: boolean;
+  additionalOffset?: number;
   parentRef?: React.MutableRefObject<SpatialNavigationVirtualizedListRef | null>;
 };
 
@@ -49,7 +53,17 @@ export default HorizontalScrollableList;
 
 const CustomList = React.forwardRef<View, Props>(
   (
-    {listTitle, imagePaths, aspectRatio, parentRef, viewableItems, isActive},
+    {
+      listTitle,
+      imagePaths,
+      aspectRatio,
+      parentRef,
+      viewableItems,
+      isActive,
+      listTitleComponent,
+      listTitleHeight,
+      additionalOffset,
+    },
     ref,
   ) => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -92,18 +106,23 @@ const CustomList = React.forwardRef<View, Props>(
           height:
             ((calculateGridItemWidth(viewableItems) + scaledPixels(6)) * 1) /
               aspectRatio +
-            scaledPixels(71),
+            (listTitle ? scaledPixels(73) : 0) +
+            (listTitleComponent ? listTitleHeight! : 0),
         }}>
-        <CustomText
-          text={listTitle}
-          style={[
-            textStyles().listTitle,
-            {
-              marginVertical: theme.sizes.view.rowGap,
-              marginLeft: theme.sizes.view.horizontalPadding,
-            },
-          ]}
-        />
+        {listTitle ? (
+          <CustomText
+            text={listTitle}
+            style={[
+              textStyles().listTitle,
+              {
+                marginVertical: theme.sizes.view.rowGap,
+                marginLeft: theme.sizes.view.horizontalPadding,
+              },
+            ]}
+          />
+        ) : (
+          listTitleComponent
+        )}
 
         <DefaultFocus>
           <SpatialNavigationVirtualizedList
@@ -125,32 +144,19 @@ const CustomList = React.forwardRef<View, Props>(
                   viewProps={{
                     isTVSelectable: true,
                   }}
+                  additionalOffset={additionalOffset}
                   onSelect={() => {
                     navigation.navigate('Title');
                   }}
                   children={({isFocused}) => {
-                    const scaleAnimation = useFocusAnimation(isFocused);
                     return (
                       <View style={{flexDirection: 'row'}}>
-                        <Animated.View
-                          style={[
-                            scaleAnimation,
-                            {
-                              width: calculateGridItemWidth(viewableItems),
-                              aspectRatio: aspectRatio,
-                            },
-                          ]}>
-                          <Image
-                            source={{uri: imagePaths[index]}}
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              borderRadius: scaledPixels(16),
-                              borderWidth: scaledPixels(3),
-                              borderColor: isFocused ? 'white' : 'transparent',
-                            }}
-                          />
-                        </Animated.View>
+                        <FocusablePoster
+                          url={imagePaths[index]}
+                          width={calculateGridItemWidth(viewableItems)}
+                          aspectRatio={aspectRatio}
+                          isFocused={isFocused}
+                        />
                         <View style={{width: theme.sizes.view.rowGap}} />
                       </View>
                     );
