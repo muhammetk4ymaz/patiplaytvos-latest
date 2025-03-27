@@ -4,7 +4,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import React, {useCallback, useRef} from 'react';
-import {Animated, Image, Platform, Pressable, View} from 'react-native';
+import {Platform, View} from 'react-native';
 import {
   DefaultFocus,
   SpatialNavigationFocusableView,
@@ -13,15 +13,14 @@ import {
   SpatialNavigationVirtualizedListRef,
 } from 'react-tv-space-navigation';
 import {RootStackParamList} from '../../App';
+import {textStyles} from '../constants/TextStyle';
 import {scaledPixels} from '../helpers/scaledPixels';
-import {useFocusAnimation} from '../helpers/useFocusAnimation';
 import {useKey} from '../hooks/useKey';
 import {theme} from '../theme/theme';
 import {calculateGridItemWidth} from '../utils/calculateGridItemWidth';
+import FocusablePoster from './Custom/FocusablePoster';
 import CustomText from './CustomText';
 import {SupportedKeys} from './remote-control/SupportedKeys';
-import {textStyles} from '../constants/TextStyle';
-import FocusablePoster from './Custom/FocusablePoster';
 
 type Props = {
   listTitle?: string;
@@ -33,6 +32,11 @@ type Props = {
   isActive?: boolean;
   additionalOffset?: number;
   parentRef?: React.MutableRefObject<SpatialNavigationVirtualizedListRef | null>;
+  posterChildren?: React.ReactElement | ((props: any) => React.ReactElement);
+  children?:
+    | React.ReactElement
+    | ((isFocused: boolean, index: number) => React.ReactElement);
+  childrenHeight?: number;
 };
 
 const HorizontalScrollableList = (props: Props) => {
@@ -63,6 +67,9 @@ const CustomList = React.forwardRef<View, Props>(
       listTitleComponent,
       listTitleHeight,
       additionalOffset,
+      posterChildren,
+      children,
+      childrenHeight,
     },
     ref,
   ) => {
@@ -103,13 +110,14 @@ const CustomList = React.forwardRef<View, Props>(
       <View
         ref={ref}
         style={{
+          backgroundColor: 'blue',
           height:
-            ((calculateGridItemWidth(viewableItems) + scaledPixels(6)) * 1) /
-              aspectRatio +
-            (listTitle ? scaledPixels(73) : 0) +
-            (listTitleComponent ? listTitleHeight! : 0),
+            calculateGridItemWidth(viewableItems) / aspectRatio +
+            (listTitle ? 2 * theme.sizes.view.rowGap + scaledPixels(28) : 0) +
+            (listTitleComponent ? listTitleHeight! : 0) +
+            (children ? childrenHeight! : 0),
         }}>
-        {listTitle ? (
+        {listTitle && (
           <CustomText
             text={listTitle}
             style={[
@@ -120,9 +128,8 @@ const CustomList = React.forwardRef<View, Props>(
               },
             ]}
           />
-        ) : (
-          listTitleComponent
         )}
+        {listTitleComponent && listTitleComponent}
 
         <DefaultFocus>
           <SpatialNavigationVirtualizedList
@@ -150,14 +157,27 @@ const CustomList = React.forwardRef<View, Props>(
                   }}
                   children={({isFocused}) => {
                     return (
-                      <View style={{flexDirection: 'row'}}>
-                        <FocusablePoster
-                          url={imagePaths[index]}
-                          width={calculateGridItemWidth(viewableItems)}
-                          aspectRatio={aspectRatio}
-                          isFocused={isFocused}
-                        />
-                        <View style={{width: theme.sizes.view.rowGap}} />
+                      <View
+                        style={{
+                          width: calculateGridItemWidth(viewableItems),
+                        }}>
+                        <View style={{flexDirection: 'row'}}>
+                          <FocusablePoster
+                            url={imagePaths[index]}
+                            width={calculateGridItemWidth(viewableItems)}
+                            aspectRatio={aspectRatio}
+                            isFocused={isFocused}
+                            children={
+                              typeof posterChildren === 'function'
+                                ? posterChildren({index, isFocused})
+                                : posterChildren
+                            }
+                          />
+                          <View style={{width: theme.sizes.view.rowGap}} />
+                        </View>
+                        {typeof children === 'function'
+                          ? children(isFocused, index)
+                          : children}
                       </View>
                     );
                   }}

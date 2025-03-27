@@ -20,7 +20,7 @@ const CircleAvatar = ({source, size}: {source?: string; size: number}) => {
         style={{
           height: '100%',
           width: '100%',
-          borderRadius: scaledPixels(35),
+          borderRadius: size / 2,
         }}
       />
     </View>

@@ -36,8 +36,8 @@ const FocusablePoster = (props: Props) => {
           aspectRatio: props.aspectRatio,
           borderRadius: borderRadius,
           overflow: 'hidden',
-          borderWidth: props.isFocused ? scaledPixels(3) : 0,
-          borderColor: props.isFocused ? 'white' : 'transparent',
+          borderWidth: props.isFocused ? scaledPixels(3) : scaledPixels(3),
+          borderColor: props.isFocused ? 'white' : 'white',
         },
       ]}>
       <Image
