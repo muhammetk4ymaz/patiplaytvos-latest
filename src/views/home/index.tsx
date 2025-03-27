@@ -9,6 +9,7 @@ import HorizontalScrollableList from '../../components/HorizontalScrollableList'
 import {useMenuContext} from '../../components/Menu/MenuContext';
 import {Page} from '../../components/Page';
 import {scaledPixels} from '../../helpers/scaledPixels';
+import {theme} from '../../theme/theme';
 
 const HomeView = () => {
   const {isOpen: isMenuOpen} = useMenuContext();
@@ -39,7 +40,11 @@ const HomeView = () => {
 
   return (
     <Page>
-      <SpatialNavigationScrollView offsetFromStart={scaledPixels(76)}>
+      <SpatialNavigationScrollView
+        offsetFromStart={scaledPixels(28) + 2 * theme.sizes.list.rowGap}
+        contentContainerStyle={{
+          rowGap: theme.sizes.list.rowGap,
+        }}>
         <MainTitle />
 
         <HorizontalScrollableList

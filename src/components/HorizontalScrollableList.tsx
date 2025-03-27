@@ -25,7 +25,6 @@ import {SupportedKeys} from './remote-control/SupportedKeys';
 type Props = {
   listTitle?: string;
   listTitleComponent?: React.ReactNode;
-  listTitleHeight?: number;
   imagePaths: string[];
   aspectRatio: number;
   viewableItems: number;
@@ -46,6 +45,7 @@ const HorizontalScrollableList = (props: Props) => {
         <CustomList
           {...props}
           isActive={isActive}
+          childrenHeight={props.childrenHeight || 0}
           parentRef={props.parentRef}
         />
       )}
@@ -65,7 +65,6 @@ const CustomList = React.forwardRef<View, Props>(
       viewableItems,
       isActive,
       listTitleComponent,
-      listTitleHeight,
       additionalOffset,
       posterChildren,
       children,
@@ -108,14 +107,8 @@ const CustomList = React.forwardRef<View, Props>(
 
     return (
       <View
-        ref={ref}
         style={{
-          backgroundColor: 'blue',
-          height:
-            calculateGridItemWidth(viewableItems) / aspectRatio +
-            (listTitle ? 2 * theme.sizes.view.rowGap + scaledPixels(28) : 0) +
-            (listTitleComponent ? listTitleHeight! : 0) +
-            (children ? childrenHeight! : 0),
+          rowGap: theme.sizes.list.rowGap,
         }}>
         {listTitle && (
           <CustomText
@@ -123,7 +116,6 @@ const CustomList = React.forwardRef<View, Props>(
             style={[
               textStyles().listTitle,
               {
-                marginVertical: theme.sizes.view.rowGap,
                 marginLeft: theme.sizes.view.horizontalPadding,
               },
             ]}
@@ -131,7 +123,12 @@ const CustomList = React.forwardRef<View, Props>(
         )}
         {listTitleComponent && listTitleComponent}
 
-        <DefaultFocus>
+        <View
+          style={{
+            height:
+              calculateGridItemWidth(viewableItems) / aspectRatio +
+              childrenHeight!,
+          }}>
           <SpatialNavigationVirtualizedList
             ref={elementRef => {
               if (parentRef) parentRef.current = elementRef;
@@ -185,7 +182,7 @@ const CustomList = React.forwardRef<View, Props>(
               );
             }}
           />
-        </DefaultFocus>
+        </View>
       </View>
     );
   },

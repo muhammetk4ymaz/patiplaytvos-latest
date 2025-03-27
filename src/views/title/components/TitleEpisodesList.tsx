@@ -24,7 +24,7 @@ const TitleEpisodeList = (props: Props) => {
       listTitleComponent={
         <View
           style={{
-            height: scaledPixels(40) + 2 * theme.sizes.list.rowGap,
+            height: scaledPixels(54),
           }}>
           <SeasonsTabs
             additionalOffset={Dimensions.get('window').height * 0.5}
@@ -32,7 +32,6 @@ const TitleEpisodeList = (props: Props) => {
         </View>
       }
       additionalOffset={Dimensions.get('window').height * 0.5}
-      listTitleHeight={scaledPixels(40) + 2 * theme.sizes.list.rowGap}
       imagePaths={imagePaths2}
       aspectRatio={16 / 9}
       viewableItems={5}
@@ -60,7 +59,7 @@ const TitleEpisodeList = (props: Props) => {
           </View>
         );
       }}
-      childrenHeight={12 + RFValue(8)}
+      childrenHeight={RFValue(8) + 12}
     />
   );
 };

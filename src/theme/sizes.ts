@@ -2,7 +2,7 @@ import {scaledPixels} from '../helpers/scaledPixels';
 
 export const sizes = {
   menu: {
-    open: scaledPixels(400),
+    open: scaledPixels(250),
     closed: scaledPixels(100),
     icon: scaledPixels(20),
   },
@@ -13,6 +13,6 @@ export const sizes = {
   },
   list: {
     columnGap: scaledPixels(18),
-    rowGap: scaledPixels(16),
+    rowGap: scaledPixels(24),
   },
 };

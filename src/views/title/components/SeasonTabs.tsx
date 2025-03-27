@@ -4,7 +4,8 @@ import {
 } from 'react-tv-space-navigation';
 import {theme} from '../../../theme/theme';
 import {Button} from '../../../components/Button';
-import {Dimensions} from 'react-native';
+import {Dimensions, View} from 'react-native';
+import {scaledPixels} from '../../../helpers/scaledPixels';
 
 type Props = {
   additionalOffset: number;
@@ -17,6 +18,7 @@ const SeasonsTabs = (props: Props) => {
       horizontal
       contentContainerStyle={{
         paddingHorizontal: theme.sizes.view.horizontalPadding,
+        marginBottom: scaledPixels(4),
       }}>
       <SpatialNavigationView
         direction="horizontal"

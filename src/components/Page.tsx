@@ -1,13 +1,16 @@
 import {Direction} from '@bam.tech/lrud';
 import {useIsFocused} from '@react-navigation/native';
-import {ReactNode, useCallback, useEffect} from 'react';
+import {ReactNode, useCallback, useEffect, useRef} from 'react';
 import {
   SpatialNavigationRoot,
   useLockSpatialNavigation,
 } from 'react-tv-space-navigation';
 import {useMenuContext} from './Menu/MenuContext';
-import {Keyboard} from 'react-native';
+import {Animated, Keyboard, View} from 'react-native';
 import {GoBackConfiguration} from './GoBackConfiguration';
+import {AnimatedView} from 'react-native-reanimated/lib/typescript/component/View';
+import {useSharedValue} from 'react-native-reanimated';
+import {theme} from '../theme/theme';
 
 type Props = {children: ReactNode};
 
@@ -38,6 +41,7 @@ const SpatialNavigationKeyboardLocker = () => {
 export const Page = ({children}: Props) => {
   const isFocused = useIsFocused();
   const {isOpen: isMenuOpen, toggleMenu} = useMenuContext();
+  const paddingLeft = useRef(new Animated.Value(0)).current;
 
   const isActive = isFocused && !isMenuOpen;
 
@@ -50,13 +54,32 @@ export const Page = ({children}: Props) => {
     [toggleMenu],
   );
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      Animated.timing(paddingLeft, {
+        toValue: theme.sizes.menu.open,
+        duration: 200,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(paddingLeft, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [isMenuOpen]);
+
   return (
     <SpatialNavigationRoot
       isActive={isActive}
       onDirectionHandledWithoutMovement={onDirectionHandledWithoutMovement}>
       <GoBackConfiguration />
       <SpatialNavigationKeyboardLocker />
-      {children}
+      <Animated.View
+        style={{width: '100%', height: '100%', paddingLeft: paddingLeft}}>
+        {children}
+      </Animated.View>
     </SpatialNavigationRoot>
   );
 };

@@ -1,17 +1,12 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import HorizontalScrollableList from '../../../components/HorizontalScrollableList';
-import {
-  SpatialNavigationScrollView,
-  SpatialNavigationView,
-} from 'react-tv-space-navigation';
-import {theme} from '../../../theme/theme';
-import {scaledPixels} from '../../../helpers/scaledPixels';
+import {StyleSheet, View} from 'react-native';
+import {RFValue} from 'react-native-responsive-fontsize';
 import ProgressIndicator from '../../../components/Custom/ProgressIndicator';
 import CustomText from '../../../components/CustomText';
-import {RFValue} from 'react-native-responsive-fontsize';
-import {Button} from '../../../components/Button';
+import HorizontalScrollableList from '../../../components/HorizontalScrollableList';
 import {textStyles} from '../../../constants/TextStyle';
+import {scaledPixels} from '../../../helpers/scaledPixels';
+import {theme} from '../../../theme/theme';
 import SeasonsTabs from './SeasonTabs';
 
 type Props = {};
@@ -30,8 +25,6 @@ const TitleTrailerList = (props: Props) => {
       listTitleComponent={
         <View
           style={{
-            marginTop: 2 * theme.sizes.list.rowGap,
-            height: scaledPixels(113) + 2 * theme.sizes.list.rowGap,
             gap: theme.sizes.list.rowGap,
           }}>
           <CustomText
@@ -43,11 +36,15 @@ const TitleTrailerList = (props: Props) => {
               },
             ]}
           />
-          <SeasonsTabs additionalOffset={scaledPixels(70)} />
+          <View
+            style={{
+              height: scaledPixels(54),
+            }}>
+            <SeasonsTabs additionalOffset={scaledPixels(70)} />
+          </View>
         </View>
       }
-      additionalOffset={scaledPixels(133) + 2 * theme.sizes.list.rowGap}
-      listTitleHeight={scaledPixels(113) + 2 * theme.sizes.list.rowGap}
+      additionalOffset={scaledPixels(124) + theme.sizes.list.rowGap}
       imagePaths={imagePaths2}
       aspectRatio={16 / 9}
       viewableItems={5}
@@ -75,7 +72,7 @@ const TitleTrailerList = (props: Props) => {
           </View>
         );
       }}
-      childrenHeight={12 + RFValue(8)}
+      childrenHeight={RFValue(8) + 12}
     />
   );
 };

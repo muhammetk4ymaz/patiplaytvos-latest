@@ -8,15 +8,15 @@ import {
   SpatialNavigationScrollView,
   SpatialNavigationView,
 } from 'react-tv-space-navigation';
+import CircleAvatar from '../../components/CircleAvatar';
 import CustomText from '../../components/CustomText';
+import {textStyles} from '../../constants/TextStyle';
 import {scaledPixels} from '../../helpers/scaledPixels';
 import {theme} from '../../theme/theme';
+import TitleClipsList from './components/TitleClipsList';
 import TitleEpisodesList from './components/TitleEpisodesList';
 import TitleHeader from './components/TitleHeader';
-import TitleClipsList from './components/TitleClipsList';
 import TitleTrailerList from './components/TitleTrailerList';
-import {textStyles} from '../../constants/TextStyle';
-import CircleAvatar from '../../components/CircleAvatar';
 
 const {width, height} = Dimensions.get('window');
 
@@ -27,7 +27,8 @@ const TitleView = (props: Props) => {
 
   return (
     <SpatialNavigationRoot isActive={focused}>
-      <SpatialNavigationScrollView>
+      <SpatialNavigationScrollView
+        contentContainerStyle={{gap: theme.sizes.view.rowGap}}>
         <TitleBackdropSection />
         <View style={{height: height * 0.5}}></View>
         <View
@@ -46,8 +47,6 @@ const TitleView = (props: Props) => {
 
         <View
           style={{
-            backgroundColor: 'red',
-            marginVertical: theme.sizes.view.rowGap,
             marginLeft: theme.sizes.view.horizontalPadding,
             gap: theme.sizes.view.rowGap,
           }}>

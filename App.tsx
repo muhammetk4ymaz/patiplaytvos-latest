@@ -9,7 +9,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useWindowDimensions, View} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {Menu} from './src/components/Menu/Menu';
-import {MenuProvider} from './src/components/Menu/MenuContext';
+import {MenuProvider, useMenuContext} from './src/components/Menu/MenuContext';
 import './src/components/configureRemoteControl';
 import {theme} from './src/theme/theme';
 import CommentsView from './src/views/comments';
