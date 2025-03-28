@@ -4,6 +4,8 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import {
+  SpatialNavigationFocusableView,
+  SpatialNavigationNode,
   SpatialNavigationRoot,
   SpatialNavigationScrollView,
   SpatialNavigationView,
@@ -17,6 +19,9 @@ import TitleClipsList from './components/TitleClipsList';
 import TitleEpisodesList from './components/TitleEpisodesList';
 import TitleHeader from './components/TitleHeader';
 import TitleTrailerList from './components/TitleTrailerList';
+import InfoCard from '../../components/Custom/InfoCard';
+import TitleSimilarList from './components/TitleSimilarList';
+import TitleRelatedList from './components/TitleRelatedList';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,7 +35,7 @@ const TitleView = (props: Props) => {
       <SpatialNavigationScrollView
         contentContainerStyle={{gap: theme.sizes.view.rowGap}}>
         <TitleBackdropSection />
-        <View style={{height: height * 0.5}}></View>
+        <View style={{height: height * 0.6}}></View>
         <View
           style={{
             paddingHorizontal: theme.sizes.view.horizontalPadding,
@@ -45,25 +50,157 @@ const TitleView = (props: Props) => {
 
         <TitleTrailerList />
 
-        <View
-          style={{
-            marginLeft: theme.sizes.view.horizontalPadding,
-            gap: theme.sizes.view.rowGap,
-          }}>
-          <CustomText text={'Company'} style={textStyles().listTitle} />
-          <SpatialNavigationView
-            direction="horizontal"
-            style={{gap: theme.sizes.view.columnGap}}>
-            <CircleAvatar
-              size={scaledPixels(100)}
-              source="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Warner_Bros._logo_2023.svg/440px-Warner_Bros._logo_2023.svg.png"
-            />
-            <CircleAvatar
-              size={scaledPixels(100)}
-              source="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Img-ayyapim-487-1-900x580.jpg/440px-Img-ayyapim-487-1-900x580.jpg"
-            />
-          </SpatialNavigationView>
-        </View>
+        <SpatialNavigationNode>
+          {({isActive}) => (
+            <View
+              style={{
+                marginLeft: theme.sizes.view.horizontalPadding,
+                gap: theme.sizes.view.rowGap,
+              }}>
+              <CustomText
+                text={'Company'}
+                style={textStyles(isActive).listTitle}
+              />
+              <SpatialNavigationView
+                direction="horizontal"
+                style={{gap: theme.sizes.list.columnGap}}>
+                <SpatialNavigationFocusableView
+                  additionalOffset={theme.sizes.additionalOffset.listItem}>
+                  <CircleAvatar
+                    size={scaledPixels(100)}
+                    source="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Warner_Bros._logo_2023.svg/440px-Warner_Bros._logo_2023.svg.png"
+                  />
+                </SpatialNavigationFocusableView>
+                <SpatialNavigationFocusableView>
+                  <CircleAvatar
+                    size={scaledPixels(100)}
+                    source="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Img-ayyapim-487-1-900x580.jpg/440px-Img-ayyapim-487-1-900x580.jpg"
+                  />
+                </SpatialNavigationFocusableView>
+              </SpatialNavigationView>
+            </View>
+          )}
+        </SpatialNavigationNode>
+        <SpatialNavigationNode>
+          {({isActive}) => (
+            <View
+              style={{
+                marginLeft: theme.sizes.view.horizontalPadding,
+                gap: theme.sizes.view.rowGap,
+              }}>
+              <CustomText
+                text={'Cast'}
+                style={textStyles(isActive).listTitle}
+              />
+              <SpatialNavigationView
+                direction="horizontal"
+                style={{gap: theme.sizes.list.columnGap}}>
+                <SpatialNavigationFocusableView
+                  additionalOffset={theme.sizes.additionalOffset.listItem}>
+                  <InfoCard title="Kit Harington" subtitle="Jon Snow" />
+                </SpatialNavigationFocusableView>
+
+                <InfoCard title="Emilia Clarke" subtitle="Daenerys Targaryen" />
+                <InfoCard title="Peter Dinklage" subtitle="N/A" />
+              </SpatialNavigationView>
+            </View>
+          )}
+        </SpatialNavigationNode>
+        <SpatialNavigationNode>
+          {({isActive}) => (
+            <View
+              style={{
+                marginLeft: theme.sizes.view.horizontalPadding,
+                gap: theme.sizes.view.rowGap,
+              }}>
+              <CustomText
+                text={'Crew'}
+                style={textStyles(isActive).listTitle}
+              />
+              <SpatialNavigationView
+                direction="horizontal"
+                style={{gap: theme.sizes.list.columnGap}}>
+                <SpatialNavigationFocusableView
+                  additionalOffset={theme.sizes.additionalOffset.listItem}>
+                  <InfoCard title="David Benioff" subtitle="Director" />
+                </SpatialNavigationFocusableView>
+              </SpatialNavigationView>
+            </View>
+          )}
+        </SpatialNavigationNode>
+        <SpatialNavigationNode>
+          {({isActive}) => (
+            <View
+              style={{
+                marginLeft: theme.sizes.view.horizontalPadding,
+                gap: theme.sizes.view.rowGap,
+              }}>
+              <CustomText
+                text={'Fans'}
+                style={textStyles(isActive).listTitle}
+              />
+              <SpatialNavigationView
+                direction="horizontal"
+                style={{gap: theme.sizes.list.columnGap}}>
+                <SpatialNavigationFocusableView
+                  additionalOffset={theme.sizes.additionalOffset.listItem}>
+                  <CircleAvatar size={scaledPixels(100)} />
+                </SpatialNavigationFocusableView>
+
+                <CircleAvatar size={scaledPixels(100)} />
+              </SpatialNavigationView>
+            </View>
+          )}
+        </SpatialNavigationNode>
+
+        <SpatialNavigationNode>
+          {({isActive}) => (
+            <View
+              style={{
+                marginLeft: theme.sizes.view.horizontalPadding,
+                gap: theme.sizes.view.rowGap,
+              }}>
+              <CustomText
+                text={'Audio'}
+                style={textStyles(isActive).listTitle}
+              />
+              <SpatialNavigationView
+                direction="horizontal"
+                style={{gap: theme.sizes.list.columnGap}}>
+                <SpatialNavigationFocusableView
+                  additionalOffset={theme.sizes.additionalOffset.listItem}>
+                  <InfoCard title="English" />
+                </SpatialNavigationFocusableView>
+              </SpatialNavigationView>
+            </View>
+          )}
+        </SpatialNavigationNode>
+
+        <SpatialNavigationNode>
+          {({isActive}) => (
+            <View
+              style={{
+                marginLeft: theme.sizes.view.horizontalPadding,
+                gap: theme.sizes.view.rowGap,
+              }}>
+              <CustomText
+                text={'Subtitle'}
+                style={textStyles(isActive).listTitle}
+              />
+              <SpatialNavigationView
+                direction="horizontal"
+                style={{gap: theme.sizes.list.columnGap}}>
+                <SpatialNavigationFocusableView
+                  additionalOffset={theme.sizes.additionalOffset.listItem}>
+                  <InfoCard title="English" />
+                </SpatialNavigationFocusableView>
+              </SpatialNavigationView>
+            </View>
+          )}
+        </SpatialNavigationNode>
+
+        <TitleRelatedList />
+        <TitleSimilarList />
 
         <View
           style={{
@@ -96,11 +233,7 @@ const TitleBackdropSection = () => {
       />
       <LinearGradient
         colors={[
-          'rgba(0,0,0,0)',
-          'rgba(0,0,0,0)',
-          'rgba(0,0,0,1)',
-
-          'rgba(0,0,0,1)',
+          'rgba(0,0,0,0.5)',
           'rgba(0,0,0,1)',
           'rgba(0,0,0,1)',
           'rgba(0,0,0,1)',
@@ -116,8 +249,7 @@ const TitleWarningText = () => {
     <CustomText
       text="This work involves nudity, strong language, and suicide."
       style={{
-        color: 'white',
-        opacity: 0.5,
+        color: theme.colors.text.third,
         paddingLeft: scaledPixels(200) + 12,
         fontSize: theme.typography['2xs'],
       }}

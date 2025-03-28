@@ -51,15 +51,16 @@ const TitleEpisodeList = (props: Props) => {
               text={`E${index + 1} • Entrance Entrance`}
               numberOfLines={1}
               style={{
-                color: 'white',
-                fontSize: RFValue(8),
-                opacity: isFocused ? 1 : 0.5,
+                color: isFocused
+                  ? theme.colors.text.primary
+                  : theme.colors.text.third,
+                fontSize: theme.typography['2xs'],
               }}
             />
           </View>
         );
       }}
-      childrenHeight={RFValue(8) + 12}
+      childrenHeight={theme.typography['2xs'] + 12}
     />
   );
 };

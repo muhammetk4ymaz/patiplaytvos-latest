@@ -41,7 +41,7 @@ const HomeView = () => {
   return (
     <Page>
       <SpatialNavigationScrollView
-        offsetFromStart={scaledPixels(28) + 2 * theme.sizes.list.rowGap}
+        offsetFromStart={theme.sizes.additionalOffset.listItem}
         contentContainerStyle={{
           rowGap: theme.sizes.list.rowGap,
         }}>

@@ -1,4 +1,5 @@
 import {scaledPixels} from '../helpers/scaledPixels';
+import {theme} from './theme';
 
 export const sizes = {
   menu: {
@@ -12,7 +13,11 @@ export const sizes = {
     horizontalPadding: scaledPixels(48),
   },
   list: {
-    columnGap: scaledPixels(18),
+    columnGap: scaledPixels(16),
     rowGap: scaledPixels(24),
+  },
+
+  additionalOffset: {
+    listItem: 2 * scaledPixels(24) + scaledPixels(28), // 2 * rowGap + listTitle
   },
 };

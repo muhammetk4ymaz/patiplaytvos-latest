@@ -41,8 +41,7 @@ const TitleHeader = () => {
             <CustomText
               text="DE, JP • Action, Comedy, Drama"
               style={{
-                color: 'white',
-                opacity: 0.5,
+                color: theme.colors.text.third,
                 fontSize: theme.typography['2xs'],
               }}
             />
@@ -50,8 +49,7 @@ const TitleHeader = () => {
             <CustomText
               text="2008 - Present • 8 Seasons"
               style={{
-                color: 'white',
-                opacity: 0.5,
+                color: theme.colors.text.third,
                 fontSize: theme.typography['2xs'],
               }}
             />
@@ -60,8 +58,8 @@ const TitleHeader = () => {
           <CustomText
             text="Marvel is dedicated to delivering great stories, characters, and experiences to fans worldwide. We value inclusivity, respect, and safety. Therefore, we reserve the right to hide, delete, block, or report any inappropriate content on this account or page."
             style={{
-              color: 'white',
-              opacity: 0.5,
+              color: theme.colors.text.secondary,
+
               fontSize: theme.typography['2xs'],
             }}
           />

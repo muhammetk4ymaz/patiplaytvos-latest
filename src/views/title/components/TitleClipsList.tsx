@@ -5,6 +5,7 @@ import ProgressIndicator from '../../../components/Custom/ProgressIndicator';
 import CustomText from '../../../components/CustomText';
 import HorizontalScrollableList from '../../../components/HorizontalScrollableList';
 import {scaledPixels} from '../../../helpers/scaledPixels';
+import {theme} from '../../../theme/theme';
 
 type Props = {};
 
@@ -19,7 +20,9 @@ const TitleClipsList = (props: Props) => {
 
   return (
     <HorizontalScrollableList
-      additionalOffset={scaledPixels(76)}
+      additionalOffset={
+        theme.typography.listTitle + 2 * theme.sizes.list.rowGap
+      }
       listTitle="Clips"
       imagePaths={imagePaths2}
       aspectRatio={16 / 9}
@@ -40,15 +43,16 @@ const TitleClipsList = (props: Props) => {
               text={`Şehzade Mustafa'nın ölümü`}
               numberOfLines={1}
               style={{
-                color: 'white',
-                opacity: isFocused ? 1 : 0.5,
-                fontSize: RFValue(8),
+                color: isFocused
+                  ? theme.colors.text.primary
+                  : theme.colors.text.third,
+                fontSize: theme.typography['2xs'],
               }}
             />
           </View>
         );
       }}
-      childrenHeight={RFValue(8) + 12}
+      childrenHeight={theme.typography['2xs'] + 12}
     />
   );
 };

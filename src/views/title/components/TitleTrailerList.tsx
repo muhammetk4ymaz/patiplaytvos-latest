@@ -8,6 +8,7 @@ import {textStyles} from '../../../constants/TextStyle';
 import {scaledPixels} from '../../../helpers/scaledPixels';
 import {theme} from '../../../theme/theme';
 import SeasonsTabs from './SeasonTabs';
+import {SpatialNavigationNode} from 'react-tv-space-navigation';
 
 type Props = {};
 
@@ -25,26 +26,19 @@ const TitleTrailerList = (props: Props) => {
       listTitleComponent={
         <View
           style={{
-            gap: theme.sizes.list.rowGap,
+            height: scaledPixels(54),
           }}>
-          <CustomText
-            text={'Trailers'}
-            style={[
-              textStyles().listTitle,
-              {
-                marginLeft: theme.sizes.view.horizontalPadding,
-              },
-            ]}
+          <SeasonsTabs
+            additionalOffset={theme.sizes.additionalOffset.listItem}
           />
-          <View
-            style={{
-              height: scaledPixels(54),
-            }}>
-            <SeasonsTabs additionalOffset={scaledPixels(70)} />
-          </View>
         </View>
       }
-      additionalOffset={scaledPixels(124) + theme.sizes.list.rowGap}
+      additionalOffset={
+        scaledPixels(54) +
+        theme.sizes.additionalOffset.listItem +
+        theme.sizes.view.rowGap
+      }
+      listTitle="Trailers"
       imagePaths={imagePaths2}
       aspectRatio={16 / 9}
       viewableItems={5}
@@ -64,15 +58,16 @@ const TitleTrailerList = (props: Props) => {
               text={`E${index + 1} • Entrance Entrance`}
               numberOfLines={1}
               style={{
-                color: 'white',
-                fontSize: RFValue(8),
-                opacity: isFocused ? 1 : 0.5,
+                color: isFocused
+                  ? theme.colors.text.primary
+                  : theme.colors.text.third,
+                fontSize: theme.typography['2xs'],
               }}
             />
           </View>
         );
       }}
-      childrenHeight={RFValue(8) + 12}
+      childrenHeight={theme.typography['2xs'] + 12}
     />
   );
 };

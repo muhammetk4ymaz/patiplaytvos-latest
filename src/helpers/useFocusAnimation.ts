@@ -6,7 +6,7 @@ export const useFocusAnimation = (isFocused: boolean) => {
 
   useEffect(() => {
     Animated.spring(scaleAnimation, {
-      toValue: isFocused ? 1.1 : 1,
+      toValue: isFocused ? 1.05 : 1,
       useNativeDriver: true,
       damping: 10,
       stiffness: 100,

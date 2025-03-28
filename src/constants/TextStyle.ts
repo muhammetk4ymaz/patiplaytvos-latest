@@ -3,7 +3,7 @@ import {theme} from '../theme/theme';
 import {scaledPixels} from '../helpers/scaledPixels';
 import {RFValue} from 'react-native-responsive-fontsize';
 
-export const textStyles = function (): {
+export const textStyles = function (isActive?: boolean): {
   [key: string]: TextStyle & {fontSize: number};
 } {
   const scale = scaledPixels(1);
@@ -28,9 +28,9 @@ export const textStyles = function (): {
       fontSize: 16 * scale,
     },
     listTitle: {
-      color: 'white',
-      fontSize: scaledPixels(28),
+      fontSize: theme.typography.listTitle,
       fontWeight: '600',
+      color: isActive ? theme.colors.text.primary : theme.colors.text.third,
     },
     modalTitle: {
       color: 'white',

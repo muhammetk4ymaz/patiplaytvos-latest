@@ -6,7 +6,6 @@ import {
 import React, {useCallback, useRef} from 'react';
 import {Platform, View} from 'react-native';
 import {
-  DefaultFocus,
   SpatialNavigationFocusableView,
   SpatialNavigationNode,
   SpatialNavigationVirtualizedList,
@@ -14,7 +13,6 @@ import {
 } from 'react-tv-space-navigation';
 import {RootStackParamList} from '../../App';
 import {textStyles} from '../constants/TextStyle';
-import {scaledPixels} from '../helpers/scaledPixels';
 import {useKey} from '../hooks/useKey';
 import {theme} from '../theme/theme';
 import {calculateGridItemWidth} from '../utils/calculateGridItemWidth';
@@ -114,7 +112,7 @@ const CustomList = React.forwardRef<View, Props>(
           <CustomText
             text={listTitle}
             style={[
-              textStyles().listTitle,
+              textStyles(isActive).listTitle,
               {
                 marginLeft: theme.sizes.view.horizontalPadding,
               },
@@ -170,7 +168,7 @@ const CustomList = React.forwardRef<View, Props>(
                                 : posterChildren
                             }
                           />
-                          <View style={{width: theme.sizes.view.rowGap}} />
+                          <View style={{width: theme.sizes.list.columnGap}} />
                         </View>
                         {typeof children === 'function'
                           ? children(isFocused, index)
